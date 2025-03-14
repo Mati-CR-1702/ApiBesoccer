@@ -30,9 +30,9 @@ public class ResourceBesoccer {
     @Path("/competenciasContinentes")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CountryDto> getCountryMatchs() {
-        LOGGER.info("Received request for /competenciasContinentes");
+        LOGGER.info("reciviendo de /competenciasContinentes");
         List<CountryDto> countries = matchService.getCountryMatchs();
-        LOGGER.info("Returning countries: " + countries);
+        LOGGER.info("retorna paises : " + countries);
         return countries;
     }
 
