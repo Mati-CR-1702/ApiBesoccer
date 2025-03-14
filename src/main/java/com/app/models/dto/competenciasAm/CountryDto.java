@@ -1,8 +1,7 @@
 package com.app.models.dto.competenciasAm;
 
-import java.util.ArrayList;
 
-public class DtoCountry {
+public class CountryDto {
 
     public String id;
     public String name;
@@ -12,8 +11,6 @@ public class DtoCountry {
     public String alias;
     public String flag;
 
-    public class Root{
-        public ArrayList<DtoCountry> countries;
-    }
+
 }
 

@@ -1,7 +1,7 @@
 package com.app.service;
 
-import com.app.client.PlayerStatsClient;
-import com.app.models.dto.competenciasAm.DtoCountry;
+import com.app.client.BesoccerClient;
+import com.app.models.dto.competenciasAm.CountryDto;
 import com.app.models.dto.top5España.TeamDTO;
 import com.app.models.response.competenciasAm.ResponseCountry;
 import com.app.models.response.top5España.ResponseTop5Espana;
@@ -21,7 +21,7 @@ public class MatchService {
 
     @Inject
     @RestClient
-    PlayerStatsClient playerStatsClient;
+    BesoccerClient besoccerClient;
 
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
@@ -30,11 +30,11 @@ public class MatchService {
 
     // Americaaa
 
-    public List<DtoCountry> getCountryMatchs() {
+    public List<CountryDto> getCountryMatchs() {
         LOGGER.info("llamando getCountryMatchs con la API key: " + apiKey);
-        ResponseCountry response = playerStatsClient.getCountryMatchs(apiKey, "America%2FChile", "json",
+        ResponseCountry response = besoccerClient.getCountryMatchs(apiKey, "America%2FChile", "json",
                 "countries_competitions", "am");
-        List<DtoCountry> countries = response.getCountries();
+        List<CountryDto> countries = response.getCountries();
         LOGGER.info("Reciviendo paises: " + countries);
         return countries;
     }
@@ -43,7 +43,7 @@ public class MatchService {
 
     public TopTeamsResponseDTO getTopTeams() {
         LOGGER.info("Buscando los tops de la liga de españa");
-        ResponseTop5Espana response = playerStatsClient.getLeagueTable(
+        ResponseTop5Espana response = besoccerClient.getLeagueTable(
                 apiKey, "json", "tables", "1", "1", "png", "complete"
         );
         if (response.getTeams() == null || response.getTeams().isEmpty()) {

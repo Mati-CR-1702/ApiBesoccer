@@ -1,6 +1,7 @@
 package com.app.client;
 
 
+import com.app.models.response.busquedaTeams.ResponseOriginTeams;
 import com.app.models.response.competenciasAm.ResponseCountry;
 import com.app.models.response.top5España.ResponseTop5Espana;
 import jakarta.ws.rs.GET;
@@ -14,7 +15,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "besoccer-api")
 @Path("/scripts/api/api.php")
-public interface PlayerStatsClient {
+public interface BesoccerClient {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,5 +49,20 @@ public interface PlayerStatsClient {
 
     default ResponseTop5Espana fallbackTopTeams(String apiKey, String format, String requestType, String leagueId, String group, String ext, String type) {
         return new ResponseTop5Espana();
+    }
+    // Listar equipos de una liga y que se pueda buscar por nombre de equipo
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
+    @Fallback(fallbackMethod = "fallbackTeams")
+    ResponseOriginTeams getTeamsByLeague(
+            @QueryParam("key") String apiKey,
+            @QueryParam("format") String format,
+            @QueryParam("req") String requestType,
+            @QueryParam("league") String leagueId
+    );
+
+    default ResponseOriginTeams fallbackTeams(String apiKey, String format, String requestType, String leagueId) {
+        return new ResponseOriginTeams();
     }
 }

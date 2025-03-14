@@ -1,6 +1,6 @@
 package com.app.models.response.competenciasAm;
 
-import com.app.models.dto.competenciasAm.DtoCountry;
+import com.app.models.dto.competenciasAm.CountryDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseCountry {
 
-    private List<DtoCountry> countries;
+    private List<CountryDto> countries;
 
-    public List<DtoCountry> getCountries() {
+    public List<CountryDto> getCountries() {
         return countries;
     }
 
-    public void setCountries(List<DtoCountry> countries) {
+    public void setCountries(List<CountryDto> countries) {
         this.countries = countries;
     }
 }
