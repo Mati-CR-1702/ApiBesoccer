@@ -2,7 +2,7 @@ package com.app.client;
 
 
 import com.app.models.response.busquedaTeams.ResponseOriginTeams;
-import com.app.models.response.competenciasAm.ResponseCountry;
+import com.app.models.response.competenciasAm.ResponseCompetitions;
 import com.app.models.response.top5España.ResponseTop5Espana;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -21,16 +21,16 @@ public interface BesoccerClient {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackCategories")
-    ResponseCountry getCountryMatchs(
+    ResponseCompetitions getCompetitionsByContinent(
             @QueryParam("key") String apiKey,
             @QueryParam("tz") String timezone,
-            @QueryParam("format") String format,
             @QueryParam("req") String requestType,
-            @QueryParam("filter") String filter
+            @QueryParam("filter") String filter,
+            @QueryParam("format") String format
     );
 
-    default ResponseCountry fallbackCategories(String apiKey, String timezone, String requestType, String filter, String format) {
-        return new ResponseCountry();
+    default ResponseCompetitions fallbackCategories(String apiKey, String timezone, String requestType, String filter, String format) {
+        return new ResponseCompetitions();
     }
     //TOP 5 DE ESPAÑA JODER
     @GET

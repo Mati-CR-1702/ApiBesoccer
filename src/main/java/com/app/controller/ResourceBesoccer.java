@@ -1,8 +1,10 @@
 package com.app.controller;
 
 import com.app.models.dto.busquedaTeams.FiltradoTeamsDto;
-import com.app.models.dto.competenciasAm.CountryDto;
+import com.app.models.dto.competenciasAm.Competition;
+import com.app.models.dto.competenciasAm.CompetitionDTO;
 import com.app.models.response.busquedaTeams.ResponseFiltradoTeams;
+import com.app.models.response.competenciasAm.CompetitionListResponseDTO;
 import com.app.models.response.top5España.TopTeamsResponseDTO;
 import com.app.service.MatchService;
 import com.app.service.impl.BusquedaTeamsImpl;
@@ -27,13 +29,10 @@ public class ResourceBesoccer {
 
     //AMERICA
     @GET
-    @Path("/competenciasContinentes")
+    @Path("/competenciasAmerica")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CountryDto> getCountryMatchs() {
-        LOGGER.info("reciviendo de /competenciasContinentes");
-        List<CountryDto> countries = matchService.getCountryMatchs();
-        LOGGER.info("retorna paises : " + countries);
-        return countries;
+    public CompetitionListResponseDTO getCompetitionsInAmerica() {
+        return matchService.getCompetitionsInAmerica();
     }
 
     //TOP 5 ESPAÑA

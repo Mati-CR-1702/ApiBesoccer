@@ -1,9 +1,10 @@
 package com.app.service;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.competenciasAm.CountryDto;
+import com.app.models.dto.competenciasAm.CompetitionDTO;
 import com.app.models.dto.top5España.TeamDTO;
-import com.app.models.response.competenciasAm.ResponseCountry;
+import com.app.models.response.competenciasAm.CompetitionListResponseDTO;
+import com.app.models.response.competenciasAm.ResponseCompetitions;
 import com.app.models.response.top5España.ResponseTop5Espana;
 import com.app.models.response.top5España.TopTeamsResponseDTO;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,15 +30,35 @@ public class MatchService {
     private static final Logger LOGGER = Logger.getLogger(MatchService.class);
 
     // Americaaa
+        public CompetitionListResponseDTO getCompetitionsInAmerica() {
+            LOGGER.info("Fetching all competitions and filtering only those in America...");
 
-    public List<CountryDto> getCountryMatchs() {
-        LOGGER.info("llamando getCountryMatchs con la API key: " + apiKey);
-        ResponseCountry response = besoccerClient.getCountryMatchs(apiKey, "America%2FChile", "json",
-                "countries_competitions", "am");
-        List<CountryDto> countries = response.getCountries();
-        LOGGER.info("Reciviendo paises: " + countries);
-        return countries;
-    }
+            // Obtiene todas las competiciones
+            ResponseCompetitions response = besoccerClient.getCompetitionsByContinent(apiKey, "Europe%2FMadrid",
+                    "categories", "all","json");
+
+            // Verificamos si la respuesta está vacía
+            if (response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
+                LOGGER.warn("No competitions found.");
+                return new CompetitionListResponseDTO("America", Collections.emptyList());
+            }
+
+            // Filtramos solo las competiciones de América usando
+            List<CompetitionDTO> competitionDTOs = response.getCompetitions().stream()
+                    .filter(comp -> "am".equalsIgnoreCase(comp.continent)) // Solo competiciones en América
+                    .map(comp -> new CompetitionDTO(
+                            comp.id,
+                            comp.league_id,
+                            comp.shortName,
+                            comp.name,
+                            comp.country,
+                            comp.flag,
+                            comp.logo_png
+                    ))
+                    .collect(Collectors.toList());
+
+            return new CompetitionListResponseDTO("America", competitionDTOs);
+        }
 
     // TOP 5 DE ESPAÑA JODER
 
