@@ -1,7 +1,7 @@
 package com.app.service;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.competenciasAm.CompetitionDTO;
+import com.app.models.dto.competenciasAm.CompetitionDToOriginal;
 import com.app.models.dto.top5España.TeamDTO;
 import com.app.models.response.competenciasAm.CompetitionListResponseDTO;
 import com.app.models.response.competenciasAm.ResponseCompetitions;
@@ -29,27 +29,26 @@ public class MatchService {
 
     private static final Logger LOGGER = Logger.getLogger(MatchService.class);
 
-    // Americaaa
+
         public CompetitionListResponseDTO getCompetitionsInAmerica() {
             LOGGER.info("Fetching all competitions and filtering only those in America...");
 
-            // Obtiene todas las competiciones
+
             ResponseCompetitions response = besoccerClient.getCompetitionsByContinent(apiKey, "Europe%2FMadrid",
                     "categories", "all","json");
 
-            // Verificamos si la respuesta está vacía
+
             if (response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
                 LOGGER.warn("No competitions found.");
                 return new CompetitionListResponseDTO("America", Collections.emptyList());
             }
 
-            // Filtramos solo las competiciones de América usando
-            List<CompetitionDTO> competitionDTOs = response.getCompetitions().stream()
-                    .filter(comp -> "am".equalsIgnoreCase(comp.continent)) // Solo competiciones en América
-                    .map(comp -> new CompetitionDTO(
+
+            List<CompetitionDToOriginal> competitionDToOriginals = response.getCompetitions().stream()
+                    .filter(comp -> "am".equalsIgnoreCase(comp.continent))
+                    .map(comp -> new CompetitionDToOriginal(
                             comp.id,
                             comp.league_id,
-                            comp.shortName,
                             comp.name,
                             comp.country,
                             comp.flag,
@@ -57,15 +56,15 @@ public class MatchService {
                     ))
                     .collect(Collectors.toList());
 
-            return new CompetitionListResponseDTO("America", competitionDTOs);
+            return new CompetitionListResponseDTO("America", competitionDToOriginals);
         }
 
-    // TOP 5 DE ESPAÑA JODER
+
 
     public TopTeamsResponseDTO getTopTeams() {
         LOGGER.info("Buscando los tops de la liga de españa");
         ResponseTop5Espana response = besoccerClient.getLeagueTable(
-                apiKey, "json", "tables", "1", "1", "png", "complete"
+                apiKey, "json", "tables", "1", "1", "complete"
         );
         if (response.getTeams() == null || response.getTeams().isEmpty()) {
             LOGGER.warn("No se encuentra nadaaaaaa");
@@ -76,7 +75,6 @@ public class MatchService {
                 .map(team -> new TeamDTO(
                         team.id,
                         team.group,
-                        team.groupName,
                         team.team,
                         team.points,
                         team.wins,

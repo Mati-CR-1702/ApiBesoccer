@@ -32,7 +32,7 @@ public interface BesoccerClient {
     default ResponseCompetitions fallbackCategories(String apiKey, String timezone, String requestType, String filter, String format) {
         return new ResponseCompetitions();
     }
-    //TOP 5 DE ESPAÑA JODER
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
@@ -43,14 +43,12 @@ public interface BesoccerClient {
             @QueryParam("req") String requestType,
             @QueryParam("league") String leagueId,
             @QueryParam("group") String group,
-            @QueryParam("ext") String ext,
             @QueryParam("type") String type
     );
 
-    default ResponseTop5Espana fallbackTopTeams(String apiKey, String format, String requestType, String leagueId, String group, String ext, String type) {
+    default ResponseTop5Espana fallbackTopTeams(String apiKey, String format, String requestType, String leagueId, String group, String type) {
         return new ResponseTop5Espana();
     }
-    // Listar equipos de una liga y que se pueda buscar por nombre de equipo
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)

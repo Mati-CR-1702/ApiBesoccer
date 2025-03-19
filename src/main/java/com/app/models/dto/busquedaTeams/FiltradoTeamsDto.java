@@ -1,7 +1,10 @@
 package com.app.models.dto.busquedaTeams;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FiltradoTeamsDto {
 
+    @JsonProperty()
     public String id;
     public String nameShow;
     public String group_code;
@@ -10,11 +13,11 @@ public class FiltradoTeamsDto {
     public String short_name;
     public String countryCode;
     public String nameShowTeam;
-    public int gender;
+    public String gender;
 
     public FiltradoTeamsDto(String id, String nameShow, String group_code,
                             String basealias, String fullName, String short_name,
-                            String countryCode, String nameShowTeam, int gender) {
+                            String countryCode, String nameShowTeam, String gender) {
         this.id = id;
         this.nameShow = nameShow;
         this.group_code = group_code;

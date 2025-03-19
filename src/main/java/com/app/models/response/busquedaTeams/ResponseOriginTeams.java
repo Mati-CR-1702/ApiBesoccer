@@ -1,14 +1,15 @@
 package com.app.models.response.busquedaTeams;
 
-import com.app.models.dto.busquedaTeams.OrigenTeamsDto;
+import com.app.models.dto.busquedaTeams.TeamsDtoOriginal;
 
 import java.util.List;
 
 public class ResponseOriginTeams {
 
-    public List<OrigenTeamsDto> team;
 
-    public List<OrigenTeamsDto> getTeams() {
+    public List<TeamsDtoOriginal> team;
+
+    public List<TeamsDtoOriginal> getTeams() {
         return team;
     }
 }
