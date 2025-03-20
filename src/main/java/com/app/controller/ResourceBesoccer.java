@@ -1,12 +1,12 @@
 package com.app.controller;
 
-import com.app.models.dto.busquedaTeams.FilteredTeamDTO;
+import com.app.models.dto.teamInLeague.FilteredTeamDTO;
 import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
-import com.app.models.response.busquedaTeams.FilteredTeamsResponse;
-import com.app.models.response.competenciasAm.CompetitionListResponse;
-import com.app.models.response.top5España.Top5TeamsResponse;
+import com.app.models.response.teamInLeague.FilteredTeamsResponse;
+import com.app.models.response.competitionInAmerica.CompetitionListResponse;
+import com.app.models.response.top5Spain.Top5TeamsResponse;
 import com.app.service.CompeWithTeamsService;
-import com.app.service.SearchLeagueAndTeamService;
+import com.app.service.SearchTeamInLeagueService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ResourceBesoccer {
 
     @Inject
-    SearchLeagueAndTeamService searchLeagueAndTeamService;
+    SearchTeamInLeagueService searchTeamInLeagueService;
 
     @Inject
     CompeWithTeamsService compeWithTeamsService;
@@ -29,15 +29,13 @@ public class ResourceBesoccer {
     @Inject
     CamelContext camelContext;
 
-
     @GET
     @Path("/competenciasAmerica")
     @Produces(MediaType.APPLICATION_JSON)
     public CompetitionListResponse getCompetitionsInAmerica() throws Exception {
         return camelContext.createProducerTemplate()
-            .requestBody("direct:getCompetitionsInAmerica", null, CompetitionListResponse.class);
-}
-
+                .requestBody("direct:getCompetitionsInAmerica", null, CompetitionListResponse.class);
+    }
 
     @GET
     @Path("/top5Teams")
@@ -46,7 +44,6 @@ public class ResourceBesoccer {
         return camelContext.createProducerTemplate()
                 .requestBody("direct:getTopTeams", null, Top5TeamsResponse.class);
     }
-
 
     @GET
     @Path("/{leagueId}")
@@ -60,14 +57,17 @@ public class ResourceBesoccer {
     @Path("/{leagueId}/search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchTeamByName(@PathParam("leagueId") String leagueId, @QueryParam("name") String teamName) {
-        FilteredTeamDTO team = searchLeagueAndTeamService.searchTeamByName(leagueId, teamName);
+        FilteredTeamDTO team = searchTeamInLeagueService.searchTeamByName(leagueId, teamName);
         return team != null ? Response.ok(team).build() : Response.status(Response.Status.NOT_FOUND).build();
     }
+
     @GET
     @Path("/competitions-with-teams")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
-        return compeWithTeamsService.getCompetitionsWithTeams();
+    public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() throws Exception {
+        return camelContext.createProducerTemplate()
+                .requestBody("direct:getCompetitionsWithTeams", null, List.class);
     }
+
 
 }

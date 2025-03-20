@@ -1,6 +1,6 @@
-package com.app.models.response.top5España;
+package com.app.models.response.top5Spain;
 
-import com.app.models.dto.top5España.ClassificationFiltradoDTO;
+import com.app.models.dto.top5Spain.ClassificationFiltradoDTO;
 
 import java.util.List;
 

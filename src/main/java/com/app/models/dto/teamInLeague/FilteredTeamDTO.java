@@ -1,4 +1,4 @@
-package com.app.models.dto.busquedaTeams;
+package com.app.models.dto.teamInLeague;
 
 
 public class FilteredTeamDTO {

@@ -1,4 +1,4 @@
-package com.app.models.dto.top5España;
+package com.app.models.dto.top5Spain;
 
 public class ClassificationFiltradoDTO {
 

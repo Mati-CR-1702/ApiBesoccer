@@ -1,10 +1,10 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.busquedaTeams.FilteredTeamDTO;
-import com.app.models.response.busquedaTeams.FilteredTeamsResponse;
-import com.app.models.response.busquedaTeams.ResponseOriginTeams;
-import com.app.service.SearchLeagueAndTeamService;
+import com.app.models.dto.teamInLeague.FilteredTeamDTO;
+import com.app.models.response.teamInLeague.FilteredTeamsResponse;
+import com.app.models.response.teamInLeague.ResponseOriginTeams;
+import com.app.service.SearchTeamInLeagueService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class SearchLeagueAndTeamServiceImpl implements SearchLeagueAndTeamService {
+public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeagueService {
 
     @Inject
     @RestClient
@@ -25,7 +25,7 @@ public class SearchLeagueAndTeamServiceImpl implements SearchLeagueAndTeamServic
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
 
-    private static final Logger LOGGER = Logger.getLogger(SearchLeagueAndTeamServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(SearchTeamInLeagueInLeagueServiceImpl.class);
 
     @Override
     public FilteredTeamsResponse getTeamsByLeague(String leagueId) {

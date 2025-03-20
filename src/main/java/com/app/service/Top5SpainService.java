@@ -1,6 +1,6 @@
 package com.app.service;
 
-import com.app.models.response.top5España.Top5TeamsResponse;
+import com.app.models.response.top5Spain.Top5TeamsResponse;
 
 public interface Top5SpainService {
 

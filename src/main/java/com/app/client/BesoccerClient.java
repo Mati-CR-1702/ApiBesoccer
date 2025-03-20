@@ -2,9 +2,9 @@ package com.app.client;
 
 
 import com.app.models.response.compeWithTeams.CompetitionWithTeamsResponse;
-import com.app.models.response.busquedaTeams.ResponseOriginTeams;
-import com.app.models.response.competenciasAm.ResponseCompetitions;
-import com.app.models.response.top5España.LeagueTableResponse;
+import com.app.models.response.teamInLeague.ResponseOriginTeams;
+import com.app.models.response.competitionInAmerica.ResponseCompetitions;
+import com.app.models.response.top5Spain.LeagueTableResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;

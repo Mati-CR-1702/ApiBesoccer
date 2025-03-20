@@ -3,7 +3,7 @@ package com.app.service.impl;
 import com.app.client.BesoccerClient;
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
 import com.app.models.dto.competitionInAmerica.FilteredCompetitionDTO;
-import com.app.models.response.competenciasAm.CompetitionListResponse;
+import com.app.models.response.competitionInAmerica.CompetitionListResponse;
 import com.app.service.CompetitionService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -46,7 +46,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     private List<FilteredCompetitionDTO> filterAndMapCompetitions(List<CompetitionRawDTO> rawCompetitions) {
         return rawCompetitions.stream()
-                .filter(comp -> "am".equalsIgnoreCase(comp.continent)) // Filter competitions in America
+                .filter(comp -> "am".equalsIgnoreCase(comp.continent)) 
                 .map(comp -> new FilteredCompetitionDTO(
                         comp.id,
                         comp.league_id,

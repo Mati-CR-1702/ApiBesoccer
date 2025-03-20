@@ -1,4 +1,4 @@
-package com.app.models.response.competenciasAm;
+package com.app.models.response.competitionInAmerica;
 
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

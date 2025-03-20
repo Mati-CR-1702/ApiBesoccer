@@ -1,4 +1,4 @@
-package com.app.models.response.competenciasAm;
+package com.app.models.response.competitionInAmerica;
 
 import com.app.models.dto.competitionInAmerica.FilteredCompetitionDTO;
 

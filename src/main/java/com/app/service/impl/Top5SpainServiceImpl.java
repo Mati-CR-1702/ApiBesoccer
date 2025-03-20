@@ -1,8 +1,8 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.top5España.ClassificationFiltradoDTO;
-import com.app.models.response.top5España.Top5TeamsResponse;
+import com.app.models.dto.top5Spain.ClassificationFiltradoDTO;
+import com.app.models.response.top5Spain.Top5TeamsResponse;
 import com.app.service.Top5SpainService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
