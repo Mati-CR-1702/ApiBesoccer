@@ -1,6 +1,6 @@
 package com.app.models.response.competenciasAm;
 
-import com.app.models.dto.competenciasAm.Competition;
+import com.app.models.dto.competenciasAm.CompetitionDToOriginal;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseCompetitions {
 
-    public List<Competition> category;
+    public List<CompetitionDToOriginal> category;
 
-    public List<Competition> getCompetitions() {
+    public List<CompetitionDToOriginal> getCompetitions() {
         return category;
     }
 

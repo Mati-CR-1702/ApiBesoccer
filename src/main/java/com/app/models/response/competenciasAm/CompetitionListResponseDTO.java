@@ -1,17 +1,17 @@
 package com.app.models.response.competenciasAm;
 
-import com.app.models.dto.competenciasAm.CompetitionDToOriginal;
+import com.app.models.dto.competenciasAm.CompetitionFiltradoDTO;
 
 import java.util.List;
 
 public class CompetitionListResponseDTO {
 
         public String continent;
-        public List<CompetitionDToOriginal> competitions;
+        public List<CompetitionFiltradoDTO> competitions;
 
 
 
-        public CompetitionListResponseDTO(String continent, List<CompetitionDToOriginal> competitions) {
+        public CompetitionListResponseDTO(String continent, List<CompetitionFiltradoDTO> competitions) {
             this.continent = continent;
             this.competitions = competitions;
         }

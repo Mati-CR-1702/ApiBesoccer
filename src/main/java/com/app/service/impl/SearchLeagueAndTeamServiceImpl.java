@@ -4,7 +4,7 @@ import com.app.client.BesoccerClient;
 import com.app.models.dto.busquedaTeams.FiltradoTeamsDto;
 import com.app.models.response.busquedaTeams.ResponseFiltradoTeams;
 import com.app.models.response.busquedaTeams.ResponseOriginTeams;
-import com.app.service.MatchService;
+import com.app.service.SearchLeagueAndTeamService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class BusquedaTeamsImpl {
+public class SearchLeagueAndTeamServiceImpl implements SearchLeagueAndTeamService {
 
     @Inject
     @RestClient
@@ -25,17 +25,16 @@ public class BusquedaTeamsImpl {
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
 
-    private static final Logger LOGGER = Logger.getLogger(MatchService.class);
+    private static final Logger LOGGER = Logger.getLogger(SearchLeagueAndTeamServiceImpl.class);
 
-
+    @Override
     public ResponseFiltradoTeams getTeamsByLeague(String leagueId) {
-        LOGGER.info("buscando equipo " + leagueId);
+        LOGGER.info("Buscando equipos para la liga: " + leagueId);
 
-        ResponseOriginTeams response = besoccerClient.getTeamsByLeague(apiKey, "json",
-                "teams", leagueId);
+        ResponseOriginTeams response = besoccerClient.getTeamsByLeague(apiKey, "json", "teams", leagueId);
 
         if (response.getTeams() == null || response.getTeams().isEmpty()) {
-            LOGGER.warn("No se encontro equipo");
+            LOGGER.warn("No se encontraron equipos para la liga: " + leagueId);
             return new ResponseFiltradoTeams("Liga ID: " + leagueId, Collections.emptyList());
         }
 
@@ -56,12 +55,15 @@ public class BusquedaTeamsImpl {
         return new ResponseFiltradoTeams("Liga ID: " + leagueId, teamDTOs);
     }
 
+    @Override
     public FiltradoTeamsDto searchTeamByName(String leagueId, String teamName) {
-        LOGGER.info("buscando para team: " + teamName + " en la liga de " + leagueId);
+        LOGGER.info("Buscando equipo: " + teamName + " en la liga: " + leagueId);
 
         return getTeamsByLeague(leagueId).teams.stream()
                 .filter(team -> team.nameShow.equalsIgnoreCase(teamName) || team.fullName.equalsIgnoreCase(teamName))
                 .findFirst()
                 .orElse(null);
     }
+
+
 }

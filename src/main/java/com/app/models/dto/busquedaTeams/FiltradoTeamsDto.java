@@ -1,10 +1,8 @@
 package com.app.models.dto.busquedaTeams;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FiltradoTeamsDto {
 
-    @JsonProperty()
     public String id;
     public String nameShow;
     public String group_code;

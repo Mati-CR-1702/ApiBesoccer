@@ -1,6 +1,8 @@
 package com.app.client;
 
 
+import com.app.models.dto.compeWithTeams.CompetitionResponse;
+import com.app.models.dto.compeWithTeams.TeamResponse;
 import com.app.models.response.busquedaTeams.ResponseOriginTeams;
 import com.app.models.response.competenciasAm.ResponseCompetitions;
 import com.app.models.response.top5España.ResponseTop5Espana;
@@ -33,6 +35,7 @@ public interface BesoccerClient {
         return new ResponseCompetitions();
     }
 
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
@@ -63,4 +66,36 @@ public interface BesoccerClient {
     default ResponseOriginTeams fallbackTeams(String apiKey, String format, String requestType, String leagueId) {
         return new ResponseOriginTeams();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
+    @Fallback(fallbackMethod = "fallbackCompetitions")
+    CompetitionResponse getCompetitions(
+            @QueryParam("key") String apiKey,
+            @QueryParam("tz") String timezone,
+            @QueryParam("req") String requestType,
+            @QueryParam("filter") String filter,
+            @QueryParam("format") String format
+    );
+
+    default CompetitionResponse fallbackCompetitions(String apiKey, String timezone, String requestType, String filter, String format) {
+        return new CompetitionResponse();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
+    @Fallback(fallbackMethod = "fallbackTeams2")
+    TeamResponse getTeams(
+            @QueryParam("key") String apiKey,
+            @QueryParam("format") String format,
+            @QueryParam("req") String requestType,
+            @QueryParam("league") String leagueId
+    );
+
+    default TeamResponse fallbackTeams2(String apiKey, String format, String requestType, String leagueId) {
+        return new TeamResponse();
+    }
+
 }

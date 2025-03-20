@@ -1,11 +1,13 @@
 package com.app.controller;
 
 import com.app.models.dto.busquedaTeams.FiltradoTeamsDto;
+import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
+import com.app.models.dto.compeWithTeams.TeamDTO1;
 import com.app.models.response.busquedaTeams.ResponseFiltradoTeams;
 import com.app.models.response.competenciasAm.CompetitionListResponseDTO;
 import com.app.models.response.top5España.TopTeamsResponseDTO;
-import com.app.service.MatchService;
-import com.app.service.BusquedaTeamsService;
+import com.app.service.CompeWithTeamsService;
+import com.app.service.SearchLeagueAndTeamService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,15 +15,18 @@ import jakarta.ws.rs.core.Response;
 
 import org.apache.camel.CamelContext;
 
+import java.util.List;
+
 
 @Path("/football")
 public class ResourceBesoccer {
 
     @Inject
-    MatchService matchService;
+    SearchLeagueAndTeamService searchLeagueAndTeamService;
 
     @Inject
-    BusquedaTeamsService busquedaTeams;
+    CompeWithTeamsService compeWithTeamsService;
+
     @Inject
     CamelContext camelContext;
 
@@ -56,7 +61,14 @@ public class ResourceBesoccer {
     @Path("/{leagueId}/search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchTeamByName(@PathParam("leagueId") String leagueId, @QueryParam("name") String teamName) {
-        FiltradoTeamsDto team = busquedaTeams.searchTeamByName(leagueId, teamName);
+        FiltradoTeamsDto team = searchLeagueAndTeamService.searchTeamByName(leagueId, teamName);
         return team != null ? Response.ok(team).build() : Response.status(Response.Status.NOT_FOUND).build();
     }
+    @GET
+    @Path("/competitions-with-teams")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
+        return compeWithTeamsService.getCompetitionsWithTeams();
+    }
+
 }
