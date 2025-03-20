@@ -1,4 +1,4 @@
-package com.app.models.dto.competenciasAm;
+package com.app.models.dto.competitionInAmerica;
 
 
 

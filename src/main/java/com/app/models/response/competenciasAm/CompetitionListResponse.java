@@ -1,6 +1,6 @@
 package com.app.models.response.competenciasAm;
 
-import com.app.models.dto.competenciasAm.FilteredCompetitionDTO;
+import com.app.models.dto.competitionInAmerica.FilteredCompetitionDTO;
 
 import java.util.List;
 

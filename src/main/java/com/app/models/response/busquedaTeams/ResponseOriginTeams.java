@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ResponseOriginTeams {
 
-    @JsonProperty("team") // debo arreglar esto
+    @JsonProperty("team")
     public List<FilteredTeamDTO> team;
 
     public List<FilteredTeamDTO> getTeams() {

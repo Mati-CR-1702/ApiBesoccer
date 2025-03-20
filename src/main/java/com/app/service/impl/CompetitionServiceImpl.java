@@ -1,8 +1,8 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.competenciasAm.CompetitionRawDTO;
-import com.app.models.dto.competenciasAm.FilteredCompetitionDTO;
+import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
+import com.app.models.dto.competitionInAmerica.FilteredCompetitionDTO;
 import com.app.models.response.competenciasAm.CompetitionListResponse;
 import com.app.service.CompetitionService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,12 +29,12 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public CompetitionListResponse getCompetitionsInAmerica() {
-        LOGGER.info("Fetching all competitions and filtering only those in America...");
+        LOGGER.info("Buscando competencias en America");
 
         var response = besoccerClient.getCompetitions(apiKey, "Europe%2FMadrid", "categories", "all", "json");
 
         if (response == null || response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
-            LOGGER.warn("No competitions found.");
+            LOGGER.warn("No se encontraron o no hay competencias en America");
             return new CompetitionListResponse("America", Collections.emptyList());
         }
 

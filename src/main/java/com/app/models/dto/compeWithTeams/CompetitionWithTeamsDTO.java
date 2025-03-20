@@ -9,12 +9,12 @@ public class CompetitionWithTeamsDTO {
     public String country;
     public String flag;
     public String logo;
-    public List<TeamWithTeamDTO> teams;
+    public List<TeamWithCompetitionDTO> teams;
 
     public CompetitionWithTeamsDTO(String competitionId,
                                    String competitionName,
                                    String country, String flag,
-                                   String logo, List<TeamWithTeamDTO> teams) {
+                                   String logo, List<TeamWithCompetitionDTO> teams) {
         this.competitionId = competitionId;
         this.competitionName = competitionName;
         this.country = country;

@@ -1,14 +1,14 @@
 package com.app.models.response.top5España;
 
-import com.app.models.dto.top5España.TeamFiltradoDTO;
+import com.app.models.dto.top5España.ClassificationFiltradoDTO;
 
 import java.util.List;
 
 public class LeagueTableResponse {
 
-    public List<TeamFiltradoDTO> table;
+    public List<ClassificationFiltradoDTO> table;
 
-    public List<TeamFiltradoDTO> getTeams() {
+    public List<ClassificationFiltradoDTO> getTeams() {
         return table;
     }
 }

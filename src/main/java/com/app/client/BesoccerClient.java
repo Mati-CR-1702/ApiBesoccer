@@ -1,7 +1,7 @@
 package com.app.client;
 
 
-import com.app.models.response.compeWithTeams.TeamResponse;
+import com.app.models.response.compeWithTeams.CompetitionWithTeamsResponse;
 import com.app.models.response.busquedaTeams.ResponseOriginTeams;
 import com.app.models.response.competenciasAm.ResponseCompetitions;
 import com.app.models.response.top5España.LeagueTableResponse;
@@ -39,7 +39,7 @@ public interface BesoccerClient {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackTopTeams")
-    LeagueTableResponse getLeagueTable(
+    LeagueTableResponse getClasificaciones(
             @QueryParam("key") String apiKey,
             @QueryParam("format") String format,
             @QueryParam("req") String requestType,
@@ -51,6 +51,7 @@ public interface BesoccerClient {
     default LeagueTableResponse fallbackTopTeams(String apiKey, String format, String requestType, String leagueId, String group, String type) {
         return new LeagueTableResponse();
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
@@ -68,19 +69,20 @@ public interface BesoccerClient {
 
 
 
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackTeams2")
-    TeamResponse getTeams(
+    CompetitionWithTeamsResponse getCompetitionWithTeams(
             @QueryParam("key") String apiKey,
             @QueryParam("format") String format,
             @QueryParam("req") String requestType,
             @QueryParam("league") String leagueId
     );
 
-    default TeamResponse fallbackTeams2(String apiKey, String format, String requestType, String leagueId) {
-        return new TeamResponse();
+    default CompetitionWithTeamsResponse fallbackTeams2(String apiKey, String format, String requestType, String leagueId) {
+        return new CompetitionWithTeamsResponse();
     }
 
 }

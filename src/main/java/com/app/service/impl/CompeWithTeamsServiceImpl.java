@@ -2,15 +2,15 @@ package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
 import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
-import com.app.models.dto.compeWithTeams.TeamWithTeamDTO;
-import com.app.models.response.compeWithTeams.TeamResponse;
+import com.app.models.dto.compeWithTeams.TeamWithCompetitionDTO;
+import com.app.models.response.compeWithTeams.CompetitionWithTeamsResponse;
 import com.app.service.CompeWithTeamsService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -28,25 +28,26 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
 
     @Override
     public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
-        LOGGER.info("Fetching competitions and their teams...");
+        LOGGER.info("Buscando competencias y equipos.");
 
-        // Obtener competiciones
+
         var response = besoccerClient.getCompetitions (
                 apiKey, "Europe%2FMadrid", "categories", "my_leagues", "json"
         );
 
         if (response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
-            LOGGER.warn("No competitions found.");
+            LOGGER.warn("No se encontraron competencias.");
             return Collections.emptyList();
         }
 
         List<CompetitionWithTeamsDTO> result = response.getCompetitions().stream()
                 .map(competition -> {
-                    LOGGER.info("Fetching teams for competition: " + competition.name);
-                    TeamResponse teamResponse = besoccerClient.getTeams(apiKey, "json", "teams", competition.id);
-                    List<TeamWithTeamDTO> teams = teamResponse != null && teamResponse.getTeams() != null
-                            ? teamResponse.getTeams().stream()
-                            .map(team -> new TeamWithTeamDTO(
+                    LOGGER.info("Ahora buscando equipos de : " + competition.name);
+
+                    CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getCompetitionWithTeams(apiKey, "json", "teams", competition.id);
+                    List<TeamWithCompetitionDTO> teams = competitionWithTeamsResponse != null && competitionWithTeamsResponse.getTeams() != null
+                                ? competitionWithTeamsResponse.getTeams().stream()
+                            .map(team -> new TeamWithCompetitionDTO(
                                     team.id,
                                     team.nameShow,
                                     team.groupCode,

@@ -3,7 +3,7 @@ package com.app.models.dto.compeWithTeams;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TeamWithTeamDTO {
+public class TeamWithCompetitionDTO {
 
     @JsonProperty("id")
     public String id;
@@ -17,7 +17,7 @@ public class TeamWithTeamDTO {
     public String shield;
 
 
-    public TeamWithTeamDTO(String id, String name, String groupCode, String country, String shield) {
+    public TeamWithCompetitionDTO(String id, String name, String groupCode, String country, String shield) {
         this.id = id;
         this.nameShow = name;
         this.groupCode = groupCode;
