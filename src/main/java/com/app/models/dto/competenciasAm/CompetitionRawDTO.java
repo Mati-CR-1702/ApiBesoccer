@@ -3,7 +3,7 @@ package com.app.models.dto.competenciasAm;
 
 
 
-public class CompetitionDToOriginal {
+public class CompetitionRawDTO {
 
     public String id;
     public String league_id;
@@ -14,7 +14,7 @@ public class CompetitionDToOriginal {
     public String logo_png;
 
 
-    public CompetitionDToOriginal(String id, String league_id, String name, String country, String flag, String continent, String logo_png) {
+    public CompetitionRawDTO(String id, String league_id, String name, String country, String flag, String continent, String logo_png) {
         this.id = id;
         this.league_id = league_id;
         this.name = name;

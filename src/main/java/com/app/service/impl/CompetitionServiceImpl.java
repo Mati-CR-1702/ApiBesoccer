@@ -1,8 +1,9 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.competenciasAm.CompetitionFiltradoDTO;
-import com.app.models.response.competenciasAm.CompetitionListResponseDTO;
+import com.app.models.dto.competenciasAm.CompetitionRawDTO;
+import com.app.models.dto.competenciasAm.FilteredCompetitionDTO;
+import com.app.models.response.competenciasAm.CompetitionListResponse;
 import com.app.service.CompetitionService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -27,19 +28,26 @@ public class CompetitionServiceImpl implements CompetitionService {
     private static final Logger LOGGER = Logger.getLogger(CompetitionServiceImpl.class);
 
     @Override
-    public CompetitionListResponseDTO getCompetitionsInAmerica() {
+    public CompetitionListResponse getCompetitionsInAmerica() {
         LOGGER.info("Fetching all competitions and filtering only those in America...");
 
-        var response = besoccerClient.getCompetitionsByContinent(apiKey, "Europe%2FMadrid", "categories", "all", "json");
+        var response = besoccerClient.getCompetitions(apiKey, "Europe%2FMadrid", "categories", "all", "json");
 
         if (response == null || response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
             LOGGER.warn("No competitions found.");
-            return new CompetitionListResponseDTO("America", Collections.emptyList());
+            return new CompetitionListResponse("America", Collections.emptyList());
         }
 
-        List<CompetitionFiltradoDTO> competitionDToOriginals = response.getCompetitions().stream()
-                .filter(comp -> "am".equalsIgnoreCase(comp.continent))
-                .map(comp -> new CompetitionFiltradoDTO(
+        List<FilteredCompetitionDTO> filteredCompetitions = filterAndMapCompetitions(response.getCompetitions());
+
+        return new CompetitionListResponse("America", filteredCompetitions);
+    }
+
+
+    private List<FilteredCompetitionDTO> filterAndMapCompetitions(List<CompetitionRawDTO> rawCompetitions) {
+        return rawCompetitions.stream()
+                .filter(comp -> "am".equalsIgnoreCase(comp.continent)) // Filter competitions in America
+                .map(comp -> new FilteredCompetitionDTO(
                         comp.id,
                         comp.league_id,
                         comp.name,
@@ -48,7 +56,6 @@ public class CompetitionServiceImpl implements CompetitionService {
                         comp.logo_png
                 ))
                 .collect(Collectors.toList());
-
-        return new CompetitionListResponseDTO("America", competitionDToOriginals);
     }
+
 }

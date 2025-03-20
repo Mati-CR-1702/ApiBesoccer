@@ -1,11 +1,10 @@
 package com.app.client;
 
 
-import com.app.models.dto.compeWithTeams.CompetitionResponse;
-import com.app.models.dto.compeWithTeams.TeamResponse;
+import com.app.models.response.compeWithTeams.TeamResponse;
 import com.app.models.response.busquedaTeams.ResponseOriginTeams;
 import com.app.models.response.competenciasAm.ResponseCompetitions;
-import com.app.models.response.top5España.ResponseTop5Espana;
+import com.app.models.response.top5España.LeagueTableResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -23,7 +22,7 @@ public interface BesoccerClient {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackCategories")
-    ResponseCompetitions getCompetitionsByContinent(
+    ResponseCompetitions getCompetitions(
             @QueryParam("key") String apiKey,
             @QueryParam("tz") String timezone,
             @QueryParam("req") String requestType,
@@ -40,7 +39,7 @@ public interface BesoccerClient {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackTopTeams")
-    ResponseTop5Espana getLeagueTable(
+    LeagueTableResponse getLeagueTable(
             @QueryParam("key") String apiKey,
             @QueryParam("format") String format,
             @QueryParam("req") String requestType,
@@ -49,8 +48,8 @@ public interface BesoccerClient {
             @QueryParam("type") String type
     );
 
-    default ResponseTop5Espana fallbackTopTeams(String apiKey, String format, String requestType, String leagueId, String group, String type) {
-        return new ResponseTop5Espana();
+    default LeagueTableResponse fallbackTopTeams(String apiKey, String format, String requestType, String leagueId, String group, String type) {
+        return new LeagueTableResponse();
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -67,21 +66,7 @@ public interface BesoccerClient {
         return new ResponseOriginTeams();
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
-    @Fallback(fallbackMethod = "fallbackCompetitions")
-    CompetitionResponse getCompetitions(
-            @QueryParam("key") String apiKey,
-            @QueryParam("tz") String timezone,
-            @QueryParam("req") String requestType,
-            @QueryParam("filter") String filter,
-            @QueryParam("format") String format
-    );
 
-    default CompetitionResponse fallbackCompetitions(String apiKey, String timezone, String requestType, String filter, String format) {
-        return new CompetitionResponse();
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

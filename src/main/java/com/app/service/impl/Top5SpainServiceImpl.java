@@ -2,7 +2,7 @@ package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
 import com.app.models.dto.top5España.TeamFiltradoDTO;
-import com.app.models.response.top5España.TopTeamsResponseDTO;
+import com.app.models.response.top5España.Top5TeamsResponse;
 import com.app.service.Top5SpainService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -27,7 +27,7 @@ public class Top5SpainServiceImpl implements Top5SpainService {
     private static final Logger LOGGER = Logger.getLogger(Top5SpainServiceImpl.class);
 
     @Override
-    public TopTeamsResponseDTO getTop5Teams() {
+    public Top5TeamsResponse getTop5Teams() {
         LOGGER.info("Buscando los tops de la liga de españa");
 
         var response = besoccerClient.getLeagueTable(
@@ -36,7 +36,7 @@ public class Top5SpainServiceImpl implements Top5SpainService {
 
         if (response == null || response.getTeams() == null || response.getTeams().isEmpty()) {
             LOGGER.warn("No se encuentra nadaaaaaa");
-            return new TopTeamsResponseDTO("La Liga", Collections.emptyList());
+            return new Top5TeamsResponse("La Liga", Collections.emptyList());
         }
 
         List<TeamFiltradoDTO> teamFiltradoDTOS = response.getTeams().stream()
@@ -57,7 +57,7 @@ public class Top5SpainServiceImpl implements Top5SpainService {
                 ))
                 .collect(Collectors.toList());
 
-        return new TopTeamsResponseDTO("La Liga", teamFiltradoDTOS);
+        return new Top5TeamsResponse("La Liga", teamFiltradoDTOS);
     }
 
 }

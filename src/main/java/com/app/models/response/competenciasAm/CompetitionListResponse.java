@@ -1,0 +1,19 @@
+package com.app.models.response.competenciasAm;
+
+import com.app.models.dto.competenciasAm.FilteredCompetitionDTO;
+
+import java.util.List;
+
+public class CompetitionListResponse {
+
+        public String continent;
+        public List<FilteredCompetitionDTO> competitions;
+
+
+
+        public CompetitionListResponse(String continent, List<FilteredCompetitionDTO> competitions) {
+            this.continent = continent;
+            this.competitions = competitions;
+        }
+    }
+

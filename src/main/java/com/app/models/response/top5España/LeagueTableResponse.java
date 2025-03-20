@@ -4,7 +4,7 @@ import com.app.models.dto.top5España.TeamFiltradoDTO;
 
 import java.util.List;
 
-public class ResponseTop5Espana {
+public class LeagueTableResponse {
 
     public List<TeamFiltradoDTO> table;
 

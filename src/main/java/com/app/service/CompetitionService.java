@@ -1,7 +1,7 @@
 package com.app.service;
 
-import com.app.models.response.competenciasAm.CompetitionListResponseDTO;
+import com.app.models.response.competenciasAm.CompetitionListResponse;
 
 public interface CompetitionService {
-    CompetitionListResponseDTO getCompetitionsInAmerica();
+    CompetitionListResponse getCompetitionsInAmerica();
 }

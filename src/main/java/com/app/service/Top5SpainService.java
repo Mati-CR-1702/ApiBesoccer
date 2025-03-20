@@ -1,8 +1,8 @@
 package com.app.service;
 
-import com.app.models.response.top5España.TopTeamsResponseDTO;
+import com.app.models.response.top5España.Top5TeamsResponse;
 
 public interface Top5SpainService {
 
-    TopTeamsResponseDTO getTop5Teams();
+    Top5TeamsResponse getTop5Teams();
 }

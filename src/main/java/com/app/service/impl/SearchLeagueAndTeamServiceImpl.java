@@ -1,8 +1,8 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
-import com.app.models.dto.busquedaTeams.FiltradoTeamsDto;
-import com.app.models.response.busquedaTeams.ResponseFiltradoTeams;
+import com.app.models.dto.busquedaTeams.FilteredTeamDTO;
+import com.app.models.response.busquedaTeams.FilteredTeamsResponse;
 import com.app.models.response.busquedaTeams.ResponseOriginTeams;
 import com.app.service.SearchLeagueAndTeamService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,18 +28,18 @@ public class SearchLeagueAndTeamServiceImpl implements SearchLeagueAndTeamServic
     private static final Logger LOGGER = Logger.getLogger(SearchLeagueAndTeamServiceImpl.class);
 
     @Override
-    public ResponseFiltradoTeams getTeamsByLeague(String leagueId) {
+    public FilteredTeamsResponse getTeamsByLeague(String leagueId) {
         LOGGER.info("Buscando equipos para la liga: " + leagueId);
 
         ResponseOriginTeams response = besoccerClient.getTeamsByLeague(apiKey, "json", "teams", leagueId);
 
         if (response.getTeams() == null || response.getTeams().isEmpty()) {
             LOGGER.warn("No se encontraron equipos para la liga: " + leagueId);
-            return new ResponseFiltradoTeams("Liga ID: " + leagueId, Collections.emptyList());
+            return new FilteredTeamsResponse("Liga ID: " + leagueId, Collections.emptyList());
         }
 
-        List<FiltradoTeamsDto> teamDTOs = response.getTeams().stream()
-                .map(teams -> new FiltradoTeamsDto(
+        List<FilteredTeamDTO> teamDTOs = response.getTeams().stream()
+                .map(teams -> new FilteredTeamDTO(
                         teams.id,
                         teams.nameShow,
                         teams.group_code,
@@ -52,14 +52,14 @@ public class SearchLeagueAndTeamServiceImpl implements SearchLeagueAndTeamServic
                 ))
                 .collect(Collectors.toList());
 
-        return new ResponseFiltradoTeams("Liga ID: " + leagueId, teamDTOs);
+        return new FilteredTeamsResponse("Liga ID: " + leagueId, teamDTOs);
     }
 
     @Override
-    public FiltradoTeamsDto searchTeamByName(String leagueId, String teamName) {
+    public FilteredTeamDTO searchTeamByName(String leagueId, String teamName) {
         LOGGER.info("Buscando equipo: " + teamName + " en la liga: " + leagueId);
 
-        return getTeamsByLeague(leagueId).teams.stream()
+        return getTeamsByLeague(leagueId).getTeams().stream()
                 .filter(team -> team.nameShow.equalsIgnoreCase(teamName) || team.fullName.equalsIgnoreCase(teamName))
                 .findFirst()
                 .orElse(null);

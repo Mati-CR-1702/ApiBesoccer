@@ -1,6 +1,6 @@
 package com.app.models.dto.competenciasAm;
 
-public class CompetitionFiltradoDTO {
+public class FilteredCompetitionDTO {
 
     public String id;
     public String leagueId;
@@ -10,7 +10,7 @@ public class CompetitionFiltradoDTO {
     public String logoUrl;
 
 
-    public CompetitionFiltradoDTO(String id, String leagueId , String name, String country, String flagUrl, String logoUrl) {
+    public FilteredCompetitionDTO(String id, String leagueId , String name, String country, String flagUrl, String logoUrl) {
         this.id = id;
         this.leagueId = leagueId;
         this.name = name;
