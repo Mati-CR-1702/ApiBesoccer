@@ -31,7 +31,7 @@ public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeague
     public FilteredTeamsResponse getTeamsByLeague(String leagueId) {
         LOGGER.info("Buscando equipos para la liga: " + leagueId);
 
-        ResponseOriginTeams response = besoccerClient.getTeamsByLeague(apiKey, "json", "teams", leagueId);
+        var response = besoccerClient.getTeamsByLeague(apiKey, "json", "teams", leagueId);
 
         if (response.getTeams() == null || response.getTeams().isEmpty()) {
             LOGGER.warn("No se encontraron equipos para la liga: " + leagueId);

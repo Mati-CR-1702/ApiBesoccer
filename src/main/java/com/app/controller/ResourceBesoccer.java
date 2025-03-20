@@ -62,7 +62,7 @@ public class ResourceBesoccer {
     }
 
     @GET
-    @Path("/competitions-with-teams")
+    @Path("/competitionsWithTeams")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() throws Exception {
         return camelContext.createProducerTemplate()
