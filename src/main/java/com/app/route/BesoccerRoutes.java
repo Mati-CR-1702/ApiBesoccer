@@ -48,8 +48,8 @@ public class BesoccerRoutes extends RouteBuilder {
                 .log("Response: ${body}");
 
         from("direct:getCompetitionsWithTeams")
-                .log("Procesando solicitud para obtener competiciones en América...")
+                .log("Buscando competiciones con equipos...")
                 .bean(compeWithTeamsService, "getCompetitionsWithTeams")
-                .log("Competencias obtenidas: ${body}");
+                .log("Response: ${body}");
     }
 }

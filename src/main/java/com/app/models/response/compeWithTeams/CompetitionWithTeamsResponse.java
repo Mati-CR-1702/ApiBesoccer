@@ -8,9 +8,13 @@ import java.util.List;
 public class CompetitionWithTeamsResponse {
 
     @JsonProperty("team")
-    public List<TeamWithCompetitionDTO> teams;
+    private List<TeamWithCompetitionDTO> teams;
 
     public List<TeamWithCompetitionDTO> getTeams() {
         return teams;
+    }
+
+    public void setTeams(List<TeamWithCompetitionDTO> teams) {
+        this.teams = teams;
     }
 }

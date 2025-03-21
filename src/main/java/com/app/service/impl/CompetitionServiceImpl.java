@@ -2,7 +2,6 @@ package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
-import com.app.models.dto.competitionInAmerica.FilteredCompetitionDTO;
 import com.app.models.response.competitionInAmerica.CompetitionListResponse;
 import com.app.service.CompetitionService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,36 +24,49 @@ public class CompetitionServiceImpl implements CompetitionService {
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
 
+    @ConfigProperty(name = "param.ejer1.besoccer.api.timezone")
+    String timezone;
+
+    @ConfigProperty(name = "param.ejer1.besoccer.api.requestType")
+    String requestType;
+
+    @ConfigProperty(name = "param.ejer1.besoccer.api.filter")
+    String filter;
+
+    @ConfigProperty(name = "param.ejer1.besoccer.api.format")
+    String format;
+
+    @ConfigProperty(name = "besoccer.api.continent.name")
+    String continentName;
+
+    @ConfigProperty(name = "besoccer.api.continent.code")
+    String continentCode;
+
     private static final Logger LOGGER = Logger.getLogger(CompetitionServiceImpl.class);
 
     @Override
     public CompetitionListResponse getCompetitionsInAmerica() {
-        LOGGER.info("Buscando competencias en America");
+        LOGGER.info("Buscando competencias en América...");
 
-        var response = besoccerClient.getCompetitions(apiKey, "Europe%2FMadrid", "categories", "all", "json");
+        // Llamada al cliente externo para obtener las competencias
+        var response = besoccerClient.getCompetitions(apiKey, timezone, requestType, filter, format);
 
+        // Validar si la respuesta es nula o vacía
         if (response == null || response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
-            LOGGER.warn("No se encontraron o no hay competencias en America");
-            return new CompetitionListResponse("America", Collections.emptyList());
+
+            LOGGER.warn("No se encontraron competencias en América.");
+
+            return new CompetitionListResponse(continentName, Collections.emptyList());
         }
-
-        List<FilteredCompetitionDTO> filteredCompetitions = filterAndMapCompetitions(response.getCompetitions());
-
-        return new CompetitionListResponse("America", filteredCompetitions);
+        // Filtrar las competencias por continente "am"
+        List<CompetitionRawDTO> filteredCompetitions = filterCompetitionsByContinent(response.getCompetitions());
+        LOGGER.info("Competencias encontradas: " + filteredCompetitions.size());
+        return new CompetitionListResponse(continentName, filteredCompetitions);
     }
 
-
-    private List<FilteredCompetitionDTO> filterAndMapCompetitions(List<CompetitionRawDTO> rawCompetitions) {
+    private List<CompetitionRawDTO> filterCompetitionsByContinent(List<CompetitionRawDTO> rawCompetitions) {
         return rawCompetitions.stream()
-                .filter(comp -> "am".equalsIgnoreCase(comp.continent)) 
-                .map(comp -> new FilteredCompetitionDTO(
-                        comp.id,
-                        comp.league_id,
-                        comp.name,
-                        comp.country,
-                        comp.flag,
-                        comp.logo_png
-                ))
+                .filter(comp -> continentCode.equalsIgnoreCase(comp.getContinent()))
                 .collect(Collectors.toList());
     }
 

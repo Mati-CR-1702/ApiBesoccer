@@ -5,6 +5,7 @@ import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.models.dto.compeWithTeams.TeamWithCompetitionDTO;
 import com.app.models.response.compeWithTeams.CompetitionWithTeamsResponse;
 import com.app.service.CompeWithTeamsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -13,6 +14,7 @@ import org.jboss.logging.Logger;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
@@ -24,49 +26,63 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
 
+    @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.requestType")
+    String competitionsRequestType;
+
+    @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.filter")
+    String competitionsFilter;
+
+    @ConfigProperty(name = "param.ejer4.besoccer.api.timezone")
+    String competitionsTimezone;
+
+    @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.format")
+    String competitionsFormat;
+
+    @ConfigProperty(name = "param.ejer4.besoccer.api.teams.requestType")
+    String teamsRequestType;
+
+    @ConfigProperty(name = "param.ejer4.besoccer.api.teams.format")
+    String teamsFormat;
+
     private static final Logger LOGGER = Logger.getLogger(CompeWithTeamsServiceImpl.class);
 
     @Override
     public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
         LOGGER.info("Buscando competencias y equipos.");
 
-
-        var response = besoccerClient.getCompetitions (
-                apiKey, "Europe%2FMadrid", "categories", "my_leagues", "json"
+        var competitionsResponse = besoccerClient.getCompetitions(
+                apiKey, competitionsTimezone, competitionsRequestType, competitionsFilter, competitionsFormat
         );
 
-        if (response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
+        if (competitionsResponse.getCompetitions() == null || competitionsResponse.getCompetitions().isEmpty()) {
             LOGGER.warn("No se encontraron competencias.");
             return Collections.emptyList();
         }
 
-        List<CompetitionWithTeamsDTO> result = response.getCompetitions().stream()
+        return competitionsResponse.getCompetitions().stream()
                 .map(competition -> {
-                    LOGGER.info("Ahora buscando equipos de : " + competition.name);
+                    LOGGER.info("Buscando equipos para la competición: " + competition.getName());
 
-                    CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getCompetitionWithTeams(apiKey, "json", "teams", competition.id);
+                    // Llamada al endpoint para obtener los equipos
+                    CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getCompetitionWithTeams(
+                            apiKey, teamsFormat, teamsRequestType, competition.getId()
+                    );
+
+                    // Mapeo de equipos
                     List<TeamWithCompetitionDTO> teams = competitionWithTeamsResponse != null && competitionWithTeamsResponse.getTeams() != null
-                                ? competitionWithTeamsResponse.getTeams().stream()
-                            .map(team -> new TeamWithCompetitionDTO(
-                                    team.id,
-                                    team.nameShow,
-                                    team.groupCode,
-                                    team.countryCode,
-                                    team.shield
-                            ))
-                            .toList()
+                            ? competitionWithTeamsResponse.getTeams()
                             : Collections.emptyList();
+
+                    // Crear el DTO de la competición con los equipos
                     return new CompetitionWithTeamsDTO(
-                            competition.id,
-                            competition.name,
-                            competition.country,
-                            competition.flag,
-                            competition.logo_png,
+                            competition.getId(),
+                            competition.getName(),
+                            competition.getCountry(),
+                            competition.getLogo_png(),
+                            competition.getFlag(),
                             teams
                     );
                 })
-                .toList();
-
-        return result;
+                .collect(Collectors.toList());
     }
 }

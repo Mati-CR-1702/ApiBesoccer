@@ -6,22 +6,65 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TeamWithCompetitionDTO {
 
     @JsonProperty("id")
-    public String id;
-    @JsonProperty("nameShow")
-    public String nameShow;
+    private String id;
+
     @JsonProperty("group_code")
-    public String groupCode;
-    @JsonProperty("countryCode")
-    public String countryCode;
+    private String groupCode;
+
     @JsonProperty("shield")
-    public String shield;
+    private String shield;
 
+    @JsonProperty("nameShow")
+    private String nameShow;
 
-    public TeamWithCompetitionDTO(String id, String name, String groupCode, String country, String shield) {
+    @JsonProperty("countryCode")
+    private String countryCode;
+
+    public TeamWithCompetitionDTO(String id, String groupCode, String nameShow, String shield, String countryCode) {
         this.id = id;
-        this.nameShow = name;
         this.groupCode = groupCode;
-        this.countryCode = country;
+        this.nameShow = nameShow;
         this.shield = shield;
+        this.countryCode = countryCode;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public String getShield() {
+        return shield;
+    }
+
+    public void setShield(String shield) {
+        this.shield = shield;
+    }
+
+    public String getNameShow() {
+        return nameShow;
+    }
+
+    public void setNameShow(String nameShow) {
+        this.nameShow = nameShow;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 }

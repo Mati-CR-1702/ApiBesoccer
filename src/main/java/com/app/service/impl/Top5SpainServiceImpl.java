@@ -24,40 +24,58 @@ public class Top5SpainServiceImpl implements Top5SpainService {
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
 
+    @ConfigProperty(name = "param.ejer2.besoccer.api.laliga.name")
+    String leagueName;
+
+    @ConfigProperty(name = "param.ejer2.besoccer.api.laliga.leagueId")
+    String leagueId;
+
+    @ConfigProperty(name = "param.ejer2.besoccer.api.laliga.group")
+    String group;
+
+    @ConfigProperty(name = "param.ejer2.besoccer.api.laliga.type")
+    String type;
+
+    @ConfigProperty(name = "param.ejer2.besoccer.api.laliga.format")
+    String format;
+
+    @ConfigProperty(name = "param.ejer2.besoccer.api.laliga.requestType")
+    String requestType;
+
     private static final Logger LOGGER = Logger.getLogger(Top5SpainServiceImpl.class);
 
-    @Override
-    public Top5TeamsResponse getTop5Teams() {
-        LOGGER.info("Buscando los tops de la liga de españa");
+        @Override
+        public Top5TeamsResponse getTop5Teams() {
+            LOGGER.info("Buscando los top 5 equipos de " + leagueName);
 
-        var response = besoccerClient.getClasificaciones(
-                apiKey, "json", "tables", "1", "1", "complete"
-        );
+            var response = besoccerClient.getClasificaciones(
+                    apiKey, format, requestType, leagueId, group, type
+            );
 
-        if (response == null || response.getTeams() == null || response.getTeams().isEmpty()) {
-            LOGGER.warn("No se encuentra nadaaaaaa");
-            return new Top5TeamsResponse("La Liga", Collections.emptyList());
+            if (response == null || response.getTeams() == null || response.getTeams().isEmpty()) {
+                LOGGER.warn("No se encontraron equipos para " + leagueName);
+                return new Top5TeamsResponse(leagueName, Collections.emptyList());
+            }
+
+            List<ClassificationFiltradoDTO> top5Teams = response.getTeams().stream()
+                    .limit(5)
+                    .map(team -> new ClassificationFiltradoDTO(
+                            team.getId(),
+                            team.getGroup(),
+                            team.getTeam(),
+                            team.getPoints(),
+                            team.getWins(),
+                            team.getDraws(),
+                            team.getLosses(),
+                            team.getGf(),
+                            team.getGa(),
+                            team.getAvg(),
+                            team.getAbbr(),
+                            team.getPos()
+                    ))
+                    .collect(Collectors.toList());
+
+            return new Top5TeamsResponse(leagueName, top5Teams);
         }
-
-        List<ClassificationFiltradoDTO> classificationFiltradoDTOS = response.getTeams().stream()
-                .limit(5)
-                .map(team -> new ClassificationFiltradoDTO(
-                        team.id,
-                        team.group,
-                        team.team,
-                        team.points,
-                        team.wins,
-                        team.draws,
-                        team.losses,
-                        team.gf,
-                        team.ga,
-                        team.avg,
-                        team.abbr,
-                        team.pos
-                ))
-                .collect(Collectors.toList());
-
-        return new Top5TeamsResponse("La Liga", classificationFiltradoDTOS);
-    }
-
 }
+

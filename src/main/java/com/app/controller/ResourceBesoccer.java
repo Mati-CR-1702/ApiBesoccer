@@ -5,7 +5,6 @@ import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.models.response.teamInLeague.FilteredTeamsResponse;
 import com.app.models.response.competitionInAmerica.CompetitionListResponse;
 import com.app.models.response.top5Spain.Top5TeamsResponse;
-import com.app.service.CompeWithTeamsService;
 import com.app.service.SearchTeamInLeagueService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -23,8 +22,6 @@ public class ResourceBesoccer {
     @Inject
     SearchTeamInLeagueService searchTeamInLeagueService;
 
-    @Inject
-    CompeWithTeamsService compeWithTeamsService;
 
     @Inject
     CamelContext camelContext;
@@ -68,6 +65,5 @@ public class ResourceBesoccer {
         return camelContext.createProducerTemplate()
                 .requestBody("direct:getCompetitionsWithTeams", null, List.class);
     }
-
 
 }

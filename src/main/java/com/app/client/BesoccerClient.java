@@ -68,8 +68,6 @@ public interface BesoccerClient {
     }
 
 
-
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
