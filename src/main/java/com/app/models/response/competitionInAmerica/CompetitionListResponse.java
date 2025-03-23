@@ -9,13 +9,11 @@ public class CompetitionListResponse {
     private String continent;
     private List<CompetitionRawDTO> competitions;
 
-    // Constructor
     public CompetitionListResponse(String continent, List<CompetitionRawDTO> competitions) {
         this.continent = continent;
         this.competitions = competitions;
     }
 
-    // Getters y Setters
     public String getContinent() {
         return continent;
     }

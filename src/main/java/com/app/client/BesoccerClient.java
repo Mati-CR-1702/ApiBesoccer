@@ -56,7 +56,7 @@ public interface BesoccerClient {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackTeams")
-    ResponseOriginTeams getTeamsByLeague(
+    ResponseOriginTeams getTeamsForLeague(
             @QueryParam("key") String apiKey,
             @QueryParam("format") String format,
             @QueryParam("req") String requestType,
@@ -72,7 +72,7 @@ public interface BesoccerClient {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5, delay = 1000)
     @Fallback(fallbackMethod = "fallbackTeams2")
-    CompetitionWithTeamsResponse getCompetitionWithTeams(
+    CompetitionWithTeamsResponse getTeamForCompetition(
             @QueryParam("key") String apiKey,
             @QueryParam("format") String format,
             @QueryParam("req") String requestType,

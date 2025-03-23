@@ -48,17 +48,14 @@ public class CompetitionServiceImpl implements CompetitionService {
     public CompetitionListResponse getCompetitionsInAmerica() {
         LOGGER.info("Buscando competencias en América...");
 
-        // Llamada al cliente externo para obtener las competencias
         var response = besoccerClient.getCompetitions(apiKey, timezone, requestType, filter, format);
 
-        // Validar si la respuesta es nula o vacía
         if (response == null || response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
 
             LOGGER.warn("No se encontraron competencias en América.");
 
             return new CompetitionListResponse(continentName, Collections.emptyList());
         }
-        // Filtrar las competencias por continente "am"
         List<CompetitionRawDTO> filteredCompetitions = filterCompetitionsByContinent(response.getCompetitions());
         LOGGER.info("Competencias encontradas: " + filteredCompetitions.size());
         return new CompetitionListResponse(continentName, filteredCompetitions);

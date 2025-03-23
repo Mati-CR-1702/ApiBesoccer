@@ -64,7 +64,7 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
                     LOGGER.info("Buscando equipos para la competición: " + competition.getName());
 
                     // Llamada al endpoint para obtener los equipos
-                    CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getCompetitionWithTeams(
+                    CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getTeamForCompetition(
                             apiKey, teamsFormat, teamsRequestType, competition.getId()
                     );
 

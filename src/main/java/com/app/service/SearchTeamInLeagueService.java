@@ -5,7 +5,7 @@ import com.app.models.response.teamInLeague.FilteredTeamsResponse;
 
 public interface SearchTeamInLeagueService {
 
-    FilteredTeamsResponse getTeamsByLeague(String leagueId);
+    FilteredTeamsResponse getTeamsForLeague(String leagueId);
 
     FilteredTeamDTO searchTeamByName(String leagueId, String teamName);
 

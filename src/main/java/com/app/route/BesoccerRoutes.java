@@ -29,26 +29,26 @@ public class BesoccerRoutes extends RouteBuilder {
     public void configure() throws Exception {
 
         from("direct:getCompetitionsInAmerica")
-                .log("Procesando solicitud para obtener competiciones en América...")
+                .log("solicitud de competencias en America")
                 .bean(competitionService, "getCompetitionsInAmerica")
                 .log("Competencias obtenidas: ${body}");
 
 
         from("direct:getTopTeams")
-                .log("Buscando el top 5 de equipos...")
+                .log("buscando top 5 equipos")
                 .bean(top5SpainService, "getTop5Teams")
                 .log("Response: ${body}");
 
         from("direct:getTeamsByLeague")
-                .log("Buscando equipos de la liga: ${header.leagueId}")
+                .log("buscando equipos de la liga: ${header.leagueId}")
                 .process(exchange -> {
                     String leagueId = exchange.getIn().getHeader("leagueId", String.class);
-                    exchange.getIn().setBody(searchTeamInLeagueService.getTeamsByLeague(leagueId));
+                    exchange.getIn().setBody(searchTeamInLeagueService.getTeamsForLeague(leagueId));
                 })
                 .log("Response: ${body}");
 
         from("direct:getCompetitionsWithTeams")
-                .log("Buscando competiciones con equipos...")
+                .log("buscando competiciones con sus equipos")
                 .bean(compeWithTeamsService, "getCompetitionsWithTeams")
                 .log("Response: ${body}");
     }

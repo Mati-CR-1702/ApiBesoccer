@@ -7,7 +7,7 @@ import java.util.List;
 public class FilteredTeamsResponse {
 
     private String league;
-    private List<FilteredTeamDTO> teams;
+    public List<FilteredTeamDTO> teams;
 
     public FilteredTeamsResponse(String league, List<FilteredTeamDTO> teams) {
         this.league = league;

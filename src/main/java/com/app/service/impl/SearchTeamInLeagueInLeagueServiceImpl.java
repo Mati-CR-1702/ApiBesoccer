@@ -34,10 +34,10 @@ public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeague
     private static final Logger LOGGER = Logger.getLogger(SearchTeamInLeagueInLeagueServiceImpl.class);
 
     @Override
-    public FilteredTeamsResponse getTeamsByLeague(String leagueId) {
+    public FilteredTeamsResponse getTeamsForLeague(String leagueId) {
         LOGGER.info("Buscando equipos para la liga: " + leagueId);
 
-        var response = besoccerClient.getTeamsByLeague(apiKey, format, requestType, leagueId);
+        var response = besoccerClient.getTeamsForLeague(apiKey, format, requestType, leagueId);
 
         if (response.getTeams() == null || response.getTeams().isEmpty()) {
             LOGGER.warn("No se encontraron equipos para la liga: " + leagueId);
@@ -66,7 +66,7 @@ public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeague
 
         LOGGER.info("Buscando equipo: " + teamName + " en la liga: " + leagueId);
 
-        return getTeamsByLeague(leagueId).getTeams().stream()
+        return getTeamsForLeague(leagueId).getTeams().stream()
                 .filter(team -> team.getNameShow().equalsIgnoreCase(teamName) || team.getFullName().equalsIgnoreCase(teamName))
                 .findFirst()
                 .orElse(null);
