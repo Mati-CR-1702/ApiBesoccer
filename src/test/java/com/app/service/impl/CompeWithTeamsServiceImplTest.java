@@ -33,7 +33,7 @@ class CompeWithTeamsServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Simular valores de configuración
+
         compeWithTeamsService.apiKey = "test-api-key";
         compeWithTeamsService.competitionsRequestType = "test-request-type";
         compeWithTeamsService.competitionsFilter = "test-filter";
@@ -45,7 +45,7 @@ class CompeWithTeamsServiceImplTest {
 
     @Test
     void testGetCompetitionsWithTeams_exitosa() {
-        // Simular la respuesta del cliente para las competencias
+
         CompetitionRawDTO competition1 = new CompetitionRawDTO();
         competition1.setId("1");
         competition1.setName("La Liga");
@@ -67,7 +67,7 @@ class CompeWithTeamsServiceImplTest {
                 eq("test-api-key"), eq("test-timezone"), eq("test-request-type"), eq("test-filter"), eq("test-format")
         )).thenReturn(responseCompetitions);
 
-        // Simular la respuesta del cliente para los equipos
+
         TeamWithCompetitionDTO team1 = new TeamWithCompetitionDTO();
         team1.setId("1");
         team1.setNameShow("Real Madrid");
@@ -89,10 +89,10 @@ class CompeWithTeamsServiceImplTest {
                 eq("test-api-key"), eq("test-teams-format"), eq("test-teams-request-type"), eq("2")
         )).thenReturn(competitionWithTeamsResponse);
 
-        // Llamar al mtodo que se está probando
+
         List<CompetitionWithTeamsDTO> result = compeWithTeamsService.getCompetitionsWithTeams();
 
-        // Verificar los resultados
+
         assertNotNull(result);
         assertEquals(2, result.size());
 
@@ -108,7 +108,7 @@ class CompeWithTeamsServiceImplTest {
         assertEquals(2, secondCompetition.getTeams().size());
         assertEquals("Barcelona", secondCompetition.getTeams().get(1).getNameShow());
 
-        // Verificar que los mtodos del cliente fueron llamados
+
         verify(besoccerClient, times(1)).getCompetitions(
                 eq("test-api-key"), eq("test-timezone"), eq("test-request-type"), eq("test-filter"), eq("test-format")
         );

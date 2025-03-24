@@ -28,7 +28,6 @@ class Top5SpainServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Simular valores de configuración
         top5SpainService.apiKey = "test-api-key";
         top5SpainService.leagueName = "La Liga";
         top5SpainService.leagueId = "123";
@@ -40,7 +39,8 @@ class Top5SpainServiceImplTest {
 
     @Test
     void testGetTop5Teams_exitosa() {
-        // Simular la respuesta del cliente para la clasificación
+
+
         var team1 = new ClassificationFiltradoDTO("1", "A", "Real Madrid", "80", "25", "5", "8", "70", "30", "+40", "RM", "1");
         var team2 = new ClassificationFiltradoDTO("2", "A", "Barcelona", "78", "24", "6", "8", "68", "32", "+36", "FCB", "2");
         var team3 = new ClassificationFiltradoDTO("3", "A", "Atletico Madrid", "70", "21", "7", "10", "60", "40", "+20", "ATM", "3");
@@ -54,10 +54,10 @@ class Top5SpainServiceImplTest {
                 eq("test-api-key"), eq("json"), eq("league_table"), eq("123"), eq("A"), eq("classification")
         )).thenReturn(leagueTableResponse);
 
-        // Llamar al mtodo que se está probando
+
         Top5TeamsResponse result = top5SpainService.getTop5Teams();
 
-        // Verificar los resultados
+
         assertNotNull(result);
         assertEquals("La Liga", result.league);
         assertEquals(5, result.topTeams.size());
@@ -72,10 +72,9 @@ class Top5SpainServiceImplTest {
         assertEquals("Barcelona", secondTeam.getTeam());
         assertEquals("78", secondTeam.getPoints());
 
-        // Verificar que el mtodo del cliente fue llamado
+
         verify(besoccerClient, times(1)).getClasificaciones(
                 eq("test-api-key"), eq("json"), eq("league_table"), eq("123"), eq("A"), eq("classification")
         );
     }
-
 }

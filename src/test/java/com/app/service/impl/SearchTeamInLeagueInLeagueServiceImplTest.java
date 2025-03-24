@@ -28,7 +28,7 @@ class SearchTeamInLeagueInLeagueServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Simular valores de configuración
+
         searchTeamInLeagueService.apiKey = "test-api-key";
         searchTeamInLeagueService.format = "test-format";
         searchTeamInLeagueService.requestType = "test-request-type";
@@ -36,7 +36,7 @@ class SearchTeamInLeagueInLeagueServiceImplTest {
 
     @Test
     void testGetTeamsForLeague_exitosa() {
-        // Simular la respuesta del cliente para los equipos
+
         var team1 = new FilteredTeamDTO("1", "Real Madrid", "A", "RM", "Real Madrid CF", "RM", "ES", "Real Madrid", "M");
         var team2 = new FilteredTeamDTO("2", "Barcelona", "B", "FCB", "FC Barcelona", "FCB", "ES", "Barcelona", "M");
 
@@ -47,10 +47,10 @@ class SearchTeamInLeagueInLeagueServiceImplTest {
                 eq("test-api-key"), eq("test-format"), eq("test-request-type"), eq("123")
         )).thenReturn(responseOriginTeams);
 
-        // Llamar al mtodo que se está probando
+
         FilteredTeamsResponse result = searchTeamInLeagueService.getTeamsForLeague("123");
 
-        // Verificar los resultados
+
         assertNotNull(result);
         assertEquals("Liga ID: 123", result.getLeague());
         assertEquals(2, result.getTeams().size());
@@ -63,7 +63,7 @@ class SearchTeamInLeagueInLeagueServiceImplTest {
         assertEquals("2", secondTeam.getId());
         assertEquals("Barcelona", secondTeam.getNameShow());
 
-        // Verificar que el mtodo del cliente fue llamado
+
         verify(besoccerClient, times(1)).getTeamsForLeague(
                 eq("test-api-key"), eq("test-format"), eq("test-request-type"), eq("123")
         );

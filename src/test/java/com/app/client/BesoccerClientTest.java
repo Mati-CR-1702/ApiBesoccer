@@ -20,14 +20,12 @@ class BesoccerClientTest {
 
     @Test
     void testGetCompetitions() {
-        // Simular una respuesta de la API externa
         ResponseCompetitions response = besoccerClient.getCompetitions(
                 "test-api-key", "UTC", "competitions", "filter", "json"
         );
 
-        // Verificar que la respuesta no sea nula
         assertNotNull(response);
-        assertNull(response.getCompetitions()); // Verificar que el fallback devuelve una respuesta vacía
+        assertNull(response.getCompetitions());
     }
 
     @Test
@@ -37,7 +35,7 @@ class BesoccerClientTest {
         );
 
         assertNotNull(response);
-        assertNull(response.getTeams()); // Verificar que el fallback devuelve una respuesta vacía
+        assertNull(response.getTeams());
 
     }
 
@@ -48,7 +46,7 @@ class BesoccerClientTest {
         );
 
         assertNotNull(response);
-        assertNull(response.getTeams()); // Verificar que el fallback devuelve una respuesta vacía
+        assertNull(response.getTeams());
     }
 
     @Test
@@ -58,7 +56,7 @@ class BesoccerClientTest {
         );
 
         assertNotNull(response);
-        assertNull(response.getTeams()); // Verificar que el fallback devuelve una respuesta vacía
+        assertNull(response.getTeams());
     }
 
 }

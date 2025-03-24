@@ -41,7 +41,6 @@ class CompetitionWithTeamsDTOTest {
         dto.setFlag("europa_flag.png");
         dto.setTeams(Collections.emptyList());
 
-        // Verificar que los valores se asignaron correctamente
         assertEquals("456", dto.getCompetitionId());
         assertEquals("Europa League", dto.getCompetitionName());
         assertEquals("Europe", dto.getCountry());

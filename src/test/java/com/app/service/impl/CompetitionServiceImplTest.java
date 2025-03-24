@@ -30,7 +30,7 @@ class CompetitionServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Simular valores de configuración en CompetitionServiceImpl
+
         competitionService.apiKey = "test-api-key";
         competitionService.timezone = "Europe/Madrid";
         competitionService.requestType = "categories";
@@ -39,7 +39,7 @@ class CompetitionServiceImplTest {
         competitionService.continentName = "América";
         competitionService.continentCode = "am";
 
-        // Configurar el mock de LoggerConfig
+
         when(loggerConfig.getCompetitionsAmerica()).thenReturn("Buscando competencias en América");
         when(loggerConfig.noCompetitionsFound()).thenReturn("No se encontraron competencias en América.");
         when(loggerConfig.foundCompetitions(anyInt())).thenAnswer(invocation ->
@@ -50,7 +50,7 @@ class CompetitionServiceImplTest {
 
     @Test
     void testGetCompetitionsInAmerica() {
-        // Crear datos simulados
+
         CompetitionRawDTO competition1 = new CompetitionRawDTO();
         competition1.setId("1");
         competition1.setContinent("am");
@@ -64,15 +64,15 @@ class CompetitionServiceImplTest {
         ResponseCompetitions mockResponse = new ResponseCompetitions();
         mockResponse.category = Arrays.asList(competition1, competition2);
 
-        // Simular respuesta del cliente
+
         when(besoccerClient.getCompetitions(
                 anyString(), anyString(), anyString(), anyString(), anyString()
         )).thenReturn(mockResponse);
 
-        // Llamar al mtodo que se está probando
+
         var response = competitionService.getCompetitionsInAmerica();
 
-        // Verificar que la respuesta contiene solo competencias del continente "am"
+
         assertNotNull(response);
         assertEquals(1, response.getCompetitions().size());
         assertEquals("Copa América", response.getCompetitions().get(0).getName());
@@ -81,7 +81,7 @@ class CompetitionServiceImplTest {
                 "test-api-key", "Europe/Madrid", "categories", "all", "json"
         );
 
-        // Verificar que se haya llamado al logger
+
         verify(loggerConfig, times(1)).getCompetitionsAmerica();
         verify(loggerConfig, times(1)).foundCompetitions(1);
     }

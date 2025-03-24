@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.models.dto.compeWithTeams.TeamWithCompetitionDTO;
 import com.app.models.response.compeWithTeams.CompetitionWithTeamsResponse;
@@ -22,6 +23,9 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
     @Inject
     @RestClient
     BesoccerClient besoccerClient;
+
+    @Inject
+    LoggerConfig loggerConfig;
 
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
@@ -48,14 +52,14 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
 
     @Override
     public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
-        LOGGER.info("Buscando competencias y equipos.");
+        LOGGER.info("Buscando competencias y equipos");
 
         var competitionsResponse = besoccerClient.getCompetitions(
                 apiKey, competitionsTimezone, competitionsRequestType, competitionsFilter, competitionsFormat
         );
 
         if (competitionsResponse.getCompetitions() == null || competitionsResponse.getCompetitions().isEmpty()) {
-            LOGGER.warn("No se encontraron competencias.");
+            LOGGER.warn("No se encontraron competencias");
             return Collections.emptyList();
         }
 
@@ -63,17 +67,14 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
                 .map(competition -> {
                     LOGGER.info("Buscando equipos para la competición: " + competition.getName());
 
-                    // Llamada al endpoint para obtener los equipos
                     CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getTeamForCompetition(
                             apiKey, teamsFormat, teamsRequestType, competition.getId()
                     );
 
-                    // Mapeo de equipos
                     List<TeamWithCompetitionDTO> teams = competitionWithTeamsResponse != null && competitionWithTeamsResponse.getTeams() != null
                             ? competitionWithTeamsResponse.getTeams()
                             : Collections.emptyList();
 
-                    // Crear el DTO de la competición con los equipos
                     return new CompetitionWithTeamsDTO(
                             competition.getId(),
                             competition.getName(),

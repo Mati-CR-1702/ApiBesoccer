@@ -12,7 +12,7 @@ class LeagueTableResponseTest {
 
     @Test
     void testGetTeams() {
-        // Crear una lista simulada de ClassificationFiltradoDTO
+
         List<ClassificationFiltradoDTO> table = Collections.singletonList(new ClassificationFiltradoDTO(
                 "123",
                 "1",
@@ -28,20 +28,20 @@ class LeagueTableResponseTest {
                 "1"
         ));
 
-        // Crear un objeto de LeagueTableResponse y asignar la lista al atributo público
+
         LeagueTableResponse response = new LeagueTableResponse();
         response.table = table;
 
-        // Verificar que el getter devuelve la lista correctamente
+
         assertEquals(table, response.getTeams());
     }
 
     @Test
     void testEmptyTable() {
-        // Crear un objeto de LeagueTableResponse sin asignar valores
+
         LeagueTableResponse response = new LeagueTableResponse();
 
-        // Verificar que el getter devuelve null inicialmente
+
         assertNull(response.getTeams());
     }
 

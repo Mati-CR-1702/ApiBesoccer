@@ -15,6 +15,11 @@ public class LoggerConfig {
     @ConfigProperty(name = "log.message.foundCompetitions", defaultValue = "Competencias encontradas: {0}")
     String foundCompetitions;
 
+    //LOGS PARA CompeWithTeamsServiceImpl
+
+    @ConfigProperty(name = "log.message.getCompetitionsWithTeams", defaultValue = "Buscando competiciones con sus equipos")
+    String getCompetitionsWithTeams;
+
     public String getCompetitionsAmerica() {
         return getCompetitionsAmerica;
     }
