@@ -1,5 +1,6 @@
 package com.app.models.response.competitionInAmerica;
 
+import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -13,5 +14,6 @@ public class ResponseCompetitions {
     public List<CompetitionRawDTO> getCompetitions() {
         return category;
     }
+
 
 }

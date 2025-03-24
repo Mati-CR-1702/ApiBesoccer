@@ -1,7 +1,11 @@
 package com.app.route;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+import io.quarkus.test.junit.QuarkusTest;
+
+
+@QuarkusTest
 class BesoccerRoutesTest {
+
 
 }

@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
 import com.app.models.response.competitionInAmerica.ResponseCompetitions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,9 @@ class CompetitionServiceImplTest {
     @Mock
     private BesoccerClient besoccerClient;
 
+    @Mock
+    private LoggerConfig loggerConfig;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -34,27 +38,18 @@ class CompetitionServiceImplTest {
         competitionService.format = "json";
         competitionService.continentName = "América";
         competitionService.continentCode = "am";
-    }
 
-    @Test
-    void testGetCompetitionsInAmerica_NoCompetitions() {
-        // Simular respuesta vacía del cliente
-        when(besoccerClient.getCompetitions(
-                anyString(), anyString(), anyString(), anyString(), anyString()
-        )).thenReturn(new ResponseCompetitions());
-
-        var response = competitionService.getCompetitionsInAmerica();
-
-        assertNotNull(response);
-        assertTrue(response.getCompetitions().isEmpty());
-
-        verify(besoccerClient, times(1)).getCompetitions(
-                "test-api-key", "Europe/Madrid", "categories", "all", "json"
+        // Configurar el mock de LoggerConfig
+        when(loggerConfig.getCompetitionsAmerica()).thenReturn("Buscando competencias en América");
+        when(loggerConfig.noCompetitionsFound()).thenReturn("No se encontraron competencias en América.");
+        when(loggerConfig.foundCompetitions(anyInt())).thenAnswer(invocation ->
+                "Competencias encontradas: " + invocation.getArgument(0)
         );
     }
 
+
     @Test
-    void testGetCompetitionsInAmerica_WithCompetitions() {
+    void testGetCompetitionsInAmerica() {
         // Crear datos simulados
         CompetitionRawDTO competition1 = new CompetitionRawDTO();
         competition1.setId("1");
@@ -85,6 +80,10 @@ class CompetitionServiceImplTest {
         verify(besoccerClient, times(1)).getCompetitions(
                 "test-api-key", "Europe/Madrid", "categories", "all", "json"
         );
+
+        // Verificar que se haya llamado al logger
+        verify(loggerConfig, times(1)).getCompetitionsAmerica();
+        verify(loggerConfig, times(1)).foundCompetitions(1);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
 import com.app.models.response.competitionInAmerica.CompetitionListResponse;
 import com.app.service.CompetitionService;
@@ -20,6 +21,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Inject
     @RestClient
     BesoccerClient besoccerClient;
+
+    @Inject
+    LoggerConfig loggerConfig;
 
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
@@ -46,18 +50,19 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public CompetitionListResponse getCompetitionsInAmerica() {
-        LOGGER.info("Buscando competencias en América...");
+
+        LOGGER.info(loggerConfig.getCompetitionsAmerica());
 
         var response = besoccerClient.getCompetitions(apiKey, timezone, requestType, filter, format);
 
         if (response == null || response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
 
-            LOGGER.warn("No se encontraron competencias en América.");
+            LOGGER.warn(loggerConfig.noCompetitionsFound());
 
             return new CompetitionListResponse(continentName, Collections.emptyList());
         }
         List<CompetitionRawDTO> filteredCompetitions = filterCompetitionsByContinent(response.getCompetitions());
-        LOGGER.info("Competencias encontradas: " + filteredCompetitions.size());
+        LOGGER.info(loggerConfig.foundCompetitions(filteredCompetitions.size()));
         return new CompetitionListResponse(continentName, filteredCompetitions);
     }
 
