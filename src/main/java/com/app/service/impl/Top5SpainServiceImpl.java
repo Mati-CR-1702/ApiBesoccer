@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.top5Spain.ClassificationFiltradoDTO;
 import com.app.models.response.top5Spain.Top5TeamsResponse;
 import com.app.service.Top5SpainService;
@@ -20,6 +21,9 @@ public class Top5SpainServiceImpl implements Top5SpainService {
     @Inject
     @RestClient
     BesoccerClient besoccerClient;
+
+    @Inject
+    LoggerConfig loggerConfig;
 
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
@@ -46,14 +50,14 @@ public class Top5SpainServiceImpl implements Top5SpainService {
 
         @Override
         public Top5TeamsResponse getTop5Teams() {
-            LOGGER.info("Buscando los top 5 equipos de " + leagueName);
+            LOGGER.info(loggerConfig.getTop5SpainMessage()+ leagueName);
 
             var response = besoccerClient.getClasificaciones(
                     apiKey, format, requestType, leagueId, group, type
             );
 
             if (response == null || response.getTeams() == null || response.getTeams().isEmpty()) {
-                LOGGER.warn("No se encontraron equipos para " + leagueName);
+                LOGGER.warn(loggerConfig.getNoTop5SpainFoundMessage()+ leagueName);
                 return new Top5TeamsResponse(leagueName, Collections.emptyList());
             }
 

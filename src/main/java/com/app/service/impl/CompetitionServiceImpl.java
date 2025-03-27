@@ -51,18 +51,18 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public CompetitionListResponse getCompetitionsInAmerica() {
 
-        LOGGER.info(loggerConfig.getCompetitionsAmerica());
+        LOGGER.info(loggerConfig.getCompetitionsAmericaMessage());
 
         var response = besoccerClient.getCompetitions(apiKey, timezone, requestType, filter, format);
 
         if (response == null || response.getCompetitions() == null || response.getCompetitions().isEmpty()) {
 
-            LOGGER.warn(loggerConfig.noCompetitionsFound());
+            LOGGER.warn(loggerConfig.getNoCompetitionsFoundMessage());
 
             return new CompetitionListResponse(continentName, Collections.emptyList());
         }
         List<CompetitionRawDTO> filteredCompetitions = filterCompetitionsByContinent(response.getCompetitions());
-        LOGGER.info(loggerConfig.foundCompetitions(filteredCompetitions.size()));
+        LOGGER.info(loggerConfig.getFoundCompetitionsMessage(filteredCompetitions.size()));
         return new CompetitionListResponse(continentName, filteredCompetitions);
     }
 

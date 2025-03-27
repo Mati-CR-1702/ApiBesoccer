@@ -52,20 +52,20 @@ public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
 
     @Override
     public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
-        LOGGER.info("Buscando competencias y equipos");
+        LOGGER.info(loggerConfig.getCompetitionsWithTeamsMessage());
 
         var competitionsResponse = besoccerClient.getCompetitions(
                 apiKey, competitionsTimezone, competitionsRequestType, competitionsFilter, competitionsFormat
         );
 
         if (competitionsResponse.getCompetitions() == null || competitionsResponse.getCompetitions().isEmpty()) {
-            LOGGER.warn("No se encontraron competencias");
+            LOGGER.warn(loggerConfig.getNoCompetitionsWithTeamsFoundMessage());
             return Collections.emptyList();
         }
 
         return competitionsResponse.getCompetitions().stream()
                 .map(competition -> {
-                    LOGGER.info("Buscando equipos para la competición: " + competition.getName());
+                    LOGGER.info(loggerConfig.getFoundCompetitionsWithTeamsMessage()+ competition.getName());
 
                     CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getTeamForCompetition(
                             apiKey, teamsFormat, teamsRequestType, competition.getId()

@@ -16,7 +16,7 @@ import org.apache.camel.CamelContext;
 import java.util.List;
 
 
-@Path("/football")
+@Path("/v1/football")
 public class ResourceBesoccer {
 
     @Inject

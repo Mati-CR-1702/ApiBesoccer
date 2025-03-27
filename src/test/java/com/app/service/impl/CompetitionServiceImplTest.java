@@ -40,9 +40,9 @@ class CompetitionServiceImplTest {
         competitionService.continentCode = "am";
 
 
-        when(loggerConfig.getCompetitionsAmerica()).thenReturn("Buscando competencias en América");
-        when(loggerConfig.noCompetitionsFound()).thenReturn("No se encontraron competencias en América.");
-        when(loggerConfig.foundCompetitions(anyInt())).thenAnswer(invocation ->
+        when(loggerConfig.getCompetitionsAmericaMessage()).thenReturn("Buscando competencias en América");
+        when(loggerConfig.getNoCompetitionsFoundMessage()).thenReturn("No se encontraron competencias en América.");
+        when(loggerConfig.getFoundCompetitionsMessage(anyInt())).thenAnswer(invocation ->
                 "Competencias encontradas: " + invocation.getArgument(0)
         );
     }
@@ -64,14 +64,11 @@ class CompetitionServiceImplTest {
         ResponseCompetitions mockResponse = new ResponseCompetitions();
         mockResponse.category = Arrays.asList(competition1, competition2);
 
-
         when(besoccerClient.getCompetitions(
                 anyString(), anyString(), anyString(), anyString(), anyString()
         )).thenReturn(mockResponse);
 
-
         var response = competitionService.getCompetitionsInAmerica();
-
 
         assertNotNull(response);
         assertEquals(1, response.getCompetitions().size());
@@ -81,9 +78,8 @@ class CompetitionServiceImplTest {
                 "test-api-key", "Europe/Madrid", "categories", "all", "json"
         );
 
-
-        verify(loggerConfig, times(1)).getCompetitionsAmerica();
-        verify(loggerConfig, times(1)).foundCompetitions(1);
+        verify(loggerConfig, times(1)).getCompetitionsAmericaMessage();
+        verify(loggerConfig, times(1)).getFoundCompetitionsMessage(1);
     }
 
 }

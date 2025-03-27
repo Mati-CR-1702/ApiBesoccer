@@ -1,9 +1,9 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.teamInLeague.FilteredTeamDTO;
 import com.app.models.response.teamInLeague.FilteredTeamsResponse;
-import com.app.models.response.teamInLeague.ResponseOriginTeams;
 import com.app.service.SearchTeamInLeagueService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,11 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeagueService {
+public class SearchTeamInLeagueServiceImpl implements SearchTeamInLeagueService {
 
     @Inject
     @RestClient
     BesoccerClient besoccerClient;
+
+    @Inject
+    LoggerConfig loggerConfig;
 
     @ConfigProperty(name = "besoccer.api.key")
     String apiKey;
@@ -31,16 +34,17 @@ public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeague
     @ConfigProperty(name = "param.ejer3.besoccer.api.teams.requestType")
     String requestType;
 
-    private static final Logger LOGGER = Logger.getLogger(SearchTeamInLeagueInLeagueServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(SearchTeamInLeagueServiceImpl.class);
 
     @Override
     public FilteredTeamsResponse getTeamsForLeague(String leagueId) {
-        LOGGER.info("Buscando equipos para la liga: " + leagueId);
+
+        LOGGER.info(loggerConfig.getTeamsForLeagueMessage() + leagueId);
 
         var response = besoccerClient.getTeamsForLeague(apiKey, format, requestType, leagueId);
 
         if (response.getTeams() == null || response.getTeams().isEmpty()) {
-            LOGGER.warn("No se encontraron equipos para la liga: " + leagueId);
+            LOGGER.warn(loggerConfig.getNoTeamsFoundMessage() + leagueId);
             return new FilteredTeamsResponse("Liga ID: " + leagueId, Collections.emptyList());
         }
 
@@ -64,7 +68,7 @@ public class SearchTeamInLeagueInLeagueServiceImpl implements SearchTeamInLeague
     @Override
     public FilteredTeamDTO searchTeamByName(String leagueId, String teamName) {
 
-        LOGGER.info("Buscando equipo: " + teamName + " en la liga: " + leagueId);
+        LOGGER.info(loggerConfig.getSearchTeamsMessage() + teamName + loggerConfig.getInLeagueMessage() + leagueId);
 
         return getTeamsForLeague(leagueId).getTeams().stream()
                 .filter(team -> team.getNameShow().equalsIgnoreCase(teamName) || team.getFullName().equalsIgnoreCase(teamName))

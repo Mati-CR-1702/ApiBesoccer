@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.teamInLeague.FilteredTeamDTO;
 import com.app.models.response.teamInLeague.FilteredTeamsResponse;
 import com.app.models.response.teamInLeague.ResponseOriginTeams;
@@ -16,13 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-class SearchTeamInLeagueInLeagueServiceImplTest {
+class SearchTeamInLeagueServiceImplTest {
 
     @InjectMocks
-    private SearchTeamInLeagueInLeagueServiceImpl searchTeamInLeagueService;
+    private SearchTeamInLeagueServiceImpl searchTeamInLeagueService;
 
     @Mock
     private BesoccerClient besoccerClient;
+
+    @Mock
+    private LoggerConfig loggerConfig;
 
     @BeforeEach
     void setUp() {
@@ -32,6 +36,12 @@ class SearchTeamInLeagueInLeagueServiceImplTest {
         searchTeamInLeagueService.apiKey = "test-api-key";
         searchTeamInLeagueService.format = "test-format";
         searchTeamInLeagueService.requestType = "test-request-type";
+
+        when(loggerConfig.getTeamsForLeagueMessage()).thenReturn("BBuscando equipos para la liga:");
+        when(loggerConfig.getNoCompetitionsWithTeamsFoundMessage()).thenReturn("No se encontraron equipos para la liga:");
+        when(loggerConfig.getFoundCompetitionsMessage(anyInt())).thenAnswer(invocation ->
+                "Buscando equipo:" + invocation.getArgument(0)
+        );
     }
 
     @Test

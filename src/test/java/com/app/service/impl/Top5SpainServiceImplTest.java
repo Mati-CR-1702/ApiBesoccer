@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.top5Spain.ClassificationFiltradoDTO;
 import com.app.models.response.top5Spain.LeagueTableResponse;
 import com.app.models.response.top5Spain.Top5TeamsResponse;
@@ -24,6 +25,10 @@ class Top5SpainServiceImplTest {
     @Mock
     private BesoccerClient besoccerClient;
 
+    @Mock
+    private LoggerConfig loggerConfig;
+
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -35,6 +40,9 @@ class Top5SpainServiceImplTest {
         top5SpainService.type = "classification";
         top5SpainService.format = "json";
         top5SpainService.requestType = "league_table";
+
+        when(loggerConfig.getTeamsForLeagueMessage()).thenReturn("Buscando los 5 primeros equipos de la liga espanola");
+        when(loggerConfig.getNoCompetitionsWithTeamsFoundMessage()).thenReturn("No se encontraron los 5 primeros equipos de la liga espanola");
     }
 
     @Test

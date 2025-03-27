@@ -2,6 +2,7 @@ package com.app.service.impl;
 
 
 import com.app.client.BesoccerClient;
+import com.app.configs.LoggerConfig;
 import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.models.dto.compeWithTeams.TeamWithCompetitionDTO;
 import com.app.models.dto.competitionInAmerica.CompetitionRawDTO;
@@ -29,6 +30,9 @@ class CompeWithTeamsServiceImplTest {
     @Mock
     private BesoccerClient besoccerClient;
 
+    @Mock
+    private LoggerConfig loggerConfig;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -41,6 +45,12 @@ class CompeWithTeamsServiceImplTest {
         compeWithTeamsService.competitionsFormat = "test-format";
         compeWithTeamsService.teamsRequestType = "test-teams-request-type";
         compeWithTeamsService.teamsFormat = "test-teams-format";
+
+        when(loggerConfig.getCompetitionsWithTeamsMessage()).thenReturn("Buscando competencias con equipos");
+        when(loggerConfig.getNoCompetitionsWithTeamsFoundMessage()).thenReturn("No se encontraron competencias con equipos");
+        when(loggerConfig.getFoundCompetitionsMessage(anyInt())).thenAnswer(invocation ->
+                "Competencias con equipos encontradas: " + invocation.getArgument(0)
+        );
     }
 
     @Test
