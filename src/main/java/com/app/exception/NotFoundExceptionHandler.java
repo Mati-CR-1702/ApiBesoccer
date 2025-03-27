@@ -21,18 +21,15 @@ public class NotFoundExceptionHandler implements ExceptionMapper<NotFoundExcepti
 
     @Override
     public Response toResponse(NotFoundException exception) {
-        // Obtener la ruta solicitada
+
         String path = requestContext.getUriInfo().getPath();
 
-        // Excluir rutas internas de Quarkus (como /q/dev-ui)
         if (path.startsWith("q/") || path.startsWith("/q/")) {
             throw exception;
         }
 
-        // Loguear la excepción
         LOGGER.warn(loggerConfig.getNotFoundMessage() + " Ruta no encontrada: " + path);
 
-        // Manejar otras rutas no encontradas
         ErrorResponse errorResponse = new ErrorResponse(
                 Response.Status.NOT_FOUND.getStatusCode(),
                 loggerConfig.getNotFoundMessage()

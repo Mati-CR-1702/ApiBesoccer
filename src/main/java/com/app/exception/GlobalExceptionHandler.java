@@ -17,16 +17,13 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception exception) {
-        // Excluir excepciones relacionadas con la Dev UI
         if (exception.getMessage() != null && exception.getMessage().contains("q/dev-ui")) {
             LOGGER.warn(loggerConfig.getDevUiExceptionMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        // Loguear la excepción para depuración
         LOGGER.error(loggerConfig.getErrorMessage() + " " + loggerConfig.getUnhandledExceptionMessage(), exception);
 
-        // Crear una respuesta personalizada
         ErrorResponse errorResponse = new ErrorResponse(
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 loggerConfig.getUnhandledExceptionMessage()
