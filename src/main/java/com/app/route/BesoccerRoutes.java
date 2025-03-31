@@ -1,5 +1,6 @@
 package com.app.route;
 
+import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.service.CompeWithTeamsService;
 import com.app.service.CompetitionService;
 import com.app.service.SearchTeamInLeagueService;
@@ -8,6 +9,8 @@ import org.apache.camel.builder.RouteBuilder;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.List;
 
 @ApplicationScoped
 public class BesoccerRoutes extends RouteBuilder {
@@ -48,8 +51,17 @@ public class BesoccerRoutes extends RouteBuilder {
                 .log("Response: ${body}");
 
         from("direct:getCompetitionsWithTeams")
-                .log("buscando competiciones con sus equipos")
-                .bean(compeWithTeamsService, "getCompetitionsWithTeams")
-                .log("Response: ${body}");
+                .log("Iniciando proceso para obtener competiciones con sus equipos")
+                .bean(compeWithTeamsService, "getCompetitions")
+                .log("Competiciones obtenidas: ${body}")
+                .split(body())
+                .parallelProcessing()
+                .bean(compeWithTeamsService, "getTeamsForCompetition")
+                .end()
+                .process(exchange -> {
+                    List<CompetitionWithTeamsDTO> competitionsWithTeams = exchange.getIn().getBody(List.class);
+                    exchange.getIn().setBody(competitionsWithTeams);
+                })
+                .log("Proceso completado. Respuesta final: ${body}");
     }
 }

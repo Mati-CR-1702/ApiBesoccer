@@ -6,5 +6,8 @@ import java.util.List;
 
 public interface CompeWithTeamsService {
 
-    List<CompetitionWithTeamsDTO> getCompetitionsWithTeams();
+    List<CompetitionWithTeamsDTO> getCompetitions();
+
+    CompetitionWithTeamsDTO getTeamsForCompetition(CompetitionWithTeamsDTO competition);
 }
+

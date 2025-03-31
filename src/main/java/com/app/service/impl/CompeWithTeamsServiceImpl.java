@@ -20,70 +20,73 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CompeWithTeamsServiceImpl implements CompeWithTeamsService {
 
-    @Inject
-    @RestClient
-    BesoccerClient besoccerClient;
+        @Inject
+        @RestClient
+        BesoccerClient besoccerClient;
 
-    @Inject
-    LoggerConfig loggerConfig;
+        @Inject
+        LoggerConfig loggerConfig;
 
-    @ConfigProperty(name = "besoccer.api.key")
-    String apiKey;
+        @ConfigProperty(name = "besoccer.api.key")
+        String apiKey;
 
-    @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.requestType")
-    String competitionsRequestType;
+        @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.requestType")
+        String competitionsRequestType;
 
-    @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.filter")
-    String competitionsFilter;
+        @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.filter")
+        String competitionsFilter;
 
-    @ConfigProperty(name = "param.ejer4.besoccer.api.timezone")
-    String competitionsTimezone;
+        @ConfigProperty(name = "param.ejer4.besoccer.api.timezone")
+        String competitionsTimezone;
 
-    @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.format")
-    String competitionsFormat;
+        @ConfigProperty(name = "param.ejer4.besoccer.api.competitions.format")
+        String competitionsFormat;
 
-    @ConfigProperty(name = "param.ejer4.besoccer.api.teams.requestType")
-    String teamsRequestType;
+        @ConfigProperty(name = "param.ejer4.besoccer.api.teams.requestType")
+        String teamsRequestType;
 
-    @ConfigProperty(name = "param.ejer4.besoccer.api.teams.format")
-    String teamsFormat;
+        @ConfigProperty(name = "param.ejer4.besoccer.api.teams.format")
+        String teamsFormat;
 
-    private static final Logger LOGGER = Logger.getLogger(CompeWithTeamsServiceImpl.class);
+        private static final Logger LOGGER = Logger.getLogger(CompeWithTeamsServiceImpl.class);
 
-    @Override
-    public List<CompetitionWithTeamsDTO> getCompetitionsWithTeams() {
-        LOGGER.info(loggerConfig.getCompetitionsWithTeamsMessage());
+        public List<CompetitionWithTeamsDTO> getCompetitions() {
+            LOGGER.info(loggerConfig.getCompetitionsWithTeamsMessage());
 
-        var competitionsResponse = besoccerClient.getCompetitions(
-                apiKey, competitionsTimezone, competitionsRequestType, competitionsFilter, competitionsFormat
-        );
+            var competitionsResponse = besoccerClient.getCompetitions(
+                    apiKey, competitionsTimezone, competitionsRequestType, competitionsFilter, competitionsFormat
+            );
 
-        if (competitionsResponse.getCompetitions() == null || competitionsResponse.getCompetitions().isEmpty()) {
-            LOGGER.warn(loggerConfig.getNoCompetitionsWithTeamsFoundMessage());
-            return Collections.emptyList();
-        }
+            if (competitionsResponse.getCompetitions() == null || competitionsResponse.getCompetitions().isEmpty()) {
+                LOGGER.warn(loggerConfig.getNoCompetitionsWithTeamsFoundMessage());
+                return Collections.emptyList();
+            }
 
-        return competitionsResponse.getCompetitions().stream()
-                .map(competition -> {
-                    LOGGER.info(loggerConfig.getFoundCompetitionsWithTeamsMessage()+ competition.getName());
-
-                    CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getTeamForCompetition(
-                            apiKey, teamsFormat, teamsRequestType, competition.getId()
-                    );
-
-                    List<TeamWithCompetitionDTO> teams = competitionWithTeamsResponse != null && competitionWithTeamsResponse.getTeams() != null
-                            ? competitionWithTeamsResponse.getTeams()
-                            : Collections.emptyList();
-
-                    return new CompetitionWithTeamsDTO(
+            return competitionsResponse.getCompetitions().stream()
+                    .map(competition -> new CompetitionWithTeamsDTO(
                             competition.getId(),
                             competition.getName(),
                             competition.getCountry(),
                             competition.getLogo_png(),
                             competition.getFlag(),
-                            teams
-                    );
-                })
-                .collect(Collectors.toList());
-    }
+                            Collections.emptyList()
+                    ))
+                    .collect(Collectors.toList());
+        }
+
+        public CompetitionWithTeamsDTO getTeamsForCompetition(CompetitionWithTeamsDTO competition) {
+            LOGGER.info(loggerConfig.getFoundCompetitionsWithTeamsMessage() + competition.getCompetitionName());
+
+            CompetitionWithTeamsResponse competitionWithTeamsResponse = besoccerClient.getTeamForCompetition(
+                    apiKey, teamsFormat, teamsRequestType, competition.getCompetitionId()
+            );
+
+            List<TeamWithCompetitionDTO> teams = competitionWithTeamsResponse != null && competitionWithTeamsResponse.getTeams() != null
+                    ? competitionWithTeamsResponse.getTeams()
+                    : Collections.emptyList();
+
+            competition.setTeams(teams);
+            return competition;
+        }
 }
+

@@ -69,4 +69,5 @@ public class CompetitionWithTeamsDTO {
     public void setTeams(List<TeamWithCompetitionDTO> teams) {
         this.teams = teams;
     }
+
 }
