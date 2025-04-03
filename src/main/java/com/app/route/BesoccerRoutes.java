@@ -1,6 +1,5 @@
 package com.app.route;
 
-import com.app.models.dto.compeWithTeams.CompetitionWithTeamsDTO;
 import com.app.service.CompeWithTeamsService;
 import com.app.service.CompetitionService;
 import com.app.service.SearchTeamInLeagueService;
@@ -9,8 +8,6 @@ import org.apache.camel.builder.RouteBuilder;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-
-import java.util.List;
 
 @ApplicationScoped
 public class BesoccerRoutes extends RouteBuilder {
@@ -26,7 +23,7 @@ public class BesoccerRoutes extends RouteBuilder {
     CompeWithTeamsService compeWithTeamsService;
 
     @Inject
-    SearchTeamInLeagueService searchTeamInLeagueService;
+    ProcessGeneral processGeneral;
 
     @Override
     public void configure() throws Exception {
@@ -36,18 +33,14 @@ public class BesoccerRoutes extends RouteBuilder {
                 .bean(competitionService, "getCompetitionsInAmerica")
                 .log("Competencias obtenidas: ${body}");
 
-
         from("direct:getTopTeams")
                 .log("buscando top 5 equipos")
                 .bean(top5SpainService, "getTop5Teams")
                 .log("Response: ${body}");
 
         from("direct:getTeamsByLeague")
-                .log("buscando equipos de la liga: ${header.leagueId}")
-                .process(exchange -> {
-                    String leagueId = exchange.getIn().getHeader("leagueId", String.class);
-                    exchange.getIn().setBody(searchTeamInLeagueService.getTeamsForLeague(leagueId));
-                })
+                .log("Buscando equipos de la liga: ${header.leagueId}")
+                .process(processGeneral::processTeamsByLeague)
                 .log("Response: ${body}");
 
         from("direct:getCompetitionsWithTeams")
@@ -58,10 +51,7 @@ public class BesoccerRoutes extends RouteBuilder {
                 .parallelProcessing()
                 .bean(compeWithTeamsService, "getTeamsForCompetition")
                 .end()
-                .process(exchange -> {
-                    List<CompetitionWithTeamsDTO> competitionsWithTeams = exchange.getIn().getBody(List.class);
-                    exchange.getIn().setBody(competitionsWithTeams);
-                })
+                .process(processGeneral)
                 .log("Proceso completado. Respuesta final: ${body}");
     }
 }
